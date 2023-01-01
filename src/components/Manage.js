@@ -44,7 +44,7 @@ function Manage(props) {
             placeholder="Enter AutoLP Tax (type 0 for none)"
             type="number"
             min="0"
-          />
+          /> 
         </div>
         <button style={{ margin: '3%' }} onClick={()=>{
           createPool(btx.current.value,stx.current.value,lp.current.value);
