@@ -1,0 +1,184 @@
+nav{
+    background: #3C444C;
+    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5%;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    color: #CBCFD4;
+    font-size: 15px;
+    align-items: center;
+}
+
+.logo{
+    font-weight: bolder;
+    font-size: larger;
+}
+nav>div{
+    padding: 1%;
+
+}
+
+.nav-options-btn{
+    cursor: pointer;
+}
+.nav-options-selected{
+    background:linear-gradient(90deg, #F27A54 0%, #A154F2 186.42%);border-radius: 20px;
+    color: white;
+}
+
+.nav-options-btn{
+    background: transparent;
+border-radius: 20px;
+border:1px solid #747D88;
+
+}
+
+.search{
+    background-color: transparent;
+    border: 1px solid #747D88;
+    color: #747D88;
+    padding-left:0.2%;
+    padding-right: 0.5%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    border-radius: 20px;
+}
+
+input{
+    background-color: transparent;
+    border: 0px;
+    color: #747D88;
+    outline: none;
+    font-size: 15px;
+    
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;}
+  
+input:focus{
+    outline: none;
+    text-align: left;
+}
+input:focus::placeholder{
+    color: transparent;
+    text-align: left;
+}
+.search>button{
+    background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);
+    border-radius: 15px;
+    height: 4vh;
+    border:0px solid transparent;
+    background-repeat:no-repeat ;
+    color: #FFFFFF;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    box-shadow: 0 0 1px rgba(255,255,255,0);
+    cursor: pointer;
+}
+.search>button:active{
+    background: linear-gradient(90deg, #A154F2  0%,  #F27A54 100%);
+    border-radius: 15px;
+
+border-color: transparent;
+background-repeat:no-repeat ;
+}
+
+.arrow{
+    border:solid #747D88;
+    border-width: 0px 4px 4px 0px;
+    transform:  rotate(45deg);
+    display: none;
+    margin-right:20px
+}
+
+.nav-phone{
+    display: none;
+}
+@media screen and (max-width: 900px) {
+    .arrow{
+        display: initial;
+    }
+    .nav-options-selected,.nav-options-btn,.nav-options,.search{
+        display: none;
+    }
+    nav{
+        justify-content: space-between;
+    }
+    .nav-phone{
+        background: #3C444C;
+        box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.1);
+        display: none;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0.5%;
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 400;
+        color: #CBCFD4;
+        font-size: 15px;
+        align-items: center;
+        padding-top: 2%;
+        gap: 2%;
+        
+    }
+    .nav-phone>div{
+        cursor: pointer;
+        padding: 1%;
+        margin: 1%;
+    }
+    .nav-options-selected-p{
+        background:linear-gradient(90deg, #F27A54 0%, #A154F2 186.42%);
+        color: white;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-options-btn-p{
+        background: transparent;
+        border-radius: 20px;
+        border:1px solid #747D88;
+    }
+    .search-p{
+        background-color: transparent;
+        border: 1px solid #747D88;
+        color: #747D88;
+        padding-left:0.2%;
+        padding-right: 0.5%;
+        padding-top: 0.5%;
+        padding-bottom: 0.5%;
+        border-radius: 20px;
+    }
+    .search-p>button{
+        background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);
+        border-radius: 15px;
+        height: 4%;
+        border:0px solid transparent;
+        background-repeat:no-repeat ;
+        color: #FFFFFF;
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 15px;
+        box-shadow: 0 0 1px rgba(255,255,255,0);
+        cursor: pointer;
+    }
+    .search-p>button:active{
+        background: linear-gradient(90deg, #A154F2  0%,  #F27A54 100%);
+        border-radius: 15px;
+        border-color: transparent;
+        background-repeat:no-repeat ;
+    }
+    
+}

@@ -1,0 +1,32 @@
+footer{
+    position: sticky;
+    top:100vh; 
+    display: flex;
+    justify-content: space-between;
+    padding: 4% ;
+    background: #3C444C;
+    box-shadow: 0px -50px 50px rgba(0, 0, 0, 0.1);
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    color: #CBCFD4;
+    font-size: 15px;
+    align-items: center;
+}
+
+.footer-option{
+    padding: 1%;
+}
+.footer-option>a{
+    text-decoration: none;
+    color: #CBCFD4;
+}
+@media screen and (max-width:900px){
+
+    footer{
+        
+        flex-direction: column;
+        align-items: center;
+    }
+    
+}

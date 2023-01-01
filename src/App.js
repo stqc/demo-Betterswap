@@ -1,24 +1,59 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar';
+import NavbarPhone from './components/Navphone';
+import TradeContent from './components/TradeContent';
+import Manage from './components/Manage';
+import CreateToken from './components/create';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import React from 'react';
+import { getFactoryContract, connectToWeb3 } from './components/source';
+import {useEffect} from 'react';
+
+export let usdbalupdate;
+export let tokenbalupdate;
+export let updatetokendata;
 
 function App() {
+
+  useEffect(()=>{
+    async function startUP(){
+     await getFactoryContract();
+     await connectToWeb3();
+    }
+    startUP();
+},[]);
+
+const [currentUSDBal,updateUSDBal] =React.useState('$0')
+const [currentTokenBal,updateTokenBal] =React.useState('0')
+  usdbalupdate=updateUSDBal;
+  tokenbalupdate=updateTokenBal;
+  var currentTradeDate={
+    name:null,
+    supply:null,
+    token2usd:null,
+    usd2token:null,
+    buytax:null,
+    saletax:null,
+    usdinpool:null,
+    tokeninpool:null
+  };
+const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
+updatetokendata=updateCurrentTrade;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router> 
+      <Navbar/>
+      <NavbarPhone/>
+      <Routes>
+        <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
+        <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>
+        <Route  element={<CreateToken/>} path="/create"/>
+      </Routes>
+    </Router>
   );
 }
 

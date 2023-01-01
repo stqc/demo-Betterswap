@@ -1,0 +1,104 @@
+.swp-main{
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 4%;
+    grid-gap: 20px;
+}
+
+.buy-sell{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.buy-sell>div{
+    width: 100%;
+    text-align: center;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    color: #CBCFD4;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 2%;
+}
+
+.sell,.sell-selected{
+    background: linear-gradient(90deg, rgb(201, 16, 16) 40%, hsla(0, 100%, 19%, 1) 100%);
+}
+.buy,.buy-selected{
+    background: linear-gradient(270deg, rgb(12, 156, 12) 40%, rgb(0, 97, 5) 100%);
+}
+.buy-selected{
+    box-shadow: 0px 3px 4px rgb(16, 201, 16)
+}
+.sell-selected{
+    box-shadow: 2px 3px 4px rgb(201, 16, 16)
+}
+
+.info-table{
+    display: grid;
+    grid-template-columns: 1fr;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    color: #CBCFD4;
+}
+.info-table>div{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    color: #CBCFD4;
+    padding: 1%;
+    font-size: 15px;
+}
+
+.amount{
+    background-color: transparent;
+    border: 1px solid #747D88;
+    color: #747D88;
+    padding-left:1%;
+    padding-right: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: 20px;
+}
+.amount>p{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    margin: 5px 5px 0.5px 5px ;
+}
+.amount>input{
+    margin-left: 5px;
+}
+.chart-content>button,.amount>button,.swp-main>button{
+    background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);
+    border-radius: 15px;
+    height: 2em;
+    border:0px solid transparent;
+    background-repeat:no-repeat ;
+    color: #FFFFFF;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    box-shadow: 0 0 1px rgba(255,255,255,0);
+    cursor: pointer;
+}
+
+.chart-content>button:active,.amount>button:active,.swp-main>button:active{
+    background: linear-gradient(90deg, #A154F2  0%,  #F27A54 100%);
+    border-radius: 15px;
+    border-color: transparent;
+    background-repeat:no-repeat ;
+}
+
+.chart-content{color: #FFFFFF;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;}
