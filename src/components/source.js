@@ -394,3 +394,10 @@ window.addEventListener('resize',()=>{
     lineSeries = chart.addCandlestickSeries();
     lineSeries.setData(chartData);
 })
+
+window.ethereum.on("accountsChanged",async (acc)=>{
+    connectedAccount[0]=acc[0];
+    console.log(connectedAccount);
+    updateFunc(connectedAccount[0].slice(0,10)+"...");
+  })
+  
