@@ -33,6 +33,7 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
   usdbalupdate=updateUSDBal;
   tokenbalupdate=updateTokenBal;
   var currentTradeDate={
+    Address:"0x0000000000000000000000000000000000000000",
     name:null,
     supply:null,
     token2usd:null,
@@ -40,7 +41,8 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
     buytax:null,
     saletax:null,
     usdinpool:null,
-    tokeninpool:null
+    tokeninpool:null,
+    trading:true
   };
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
 updatetokendata=updateCurrentTrade;

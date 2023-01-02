@@ -92,16 +92,18 @@ function TradeContent(props) {
               <div id="tokenin">{props.tokenData.tokeninpool}</div>
             </div>
           </div>
-          <div className="amount">
-            <input style={{ width: '100%', fontSize: 'large' }} ref={amount} placeholder="Enter Amount" type="number" min="0"></input>
-            <p id="bal">Balance: {selected==="Buy"?props.currentUSDBal:props.currentTokenBal}</p>
-          </div>
-          <button onClick={ async()=>{
-            selected==="Buy"? await approveTX(USDAddress,amount.current.value,props.tokenData.Address):await approveTX(tokenAD,amount.current.value,props.tokenData.Address)
-          }}>Approve</button>
-          <button onClick={ async()=>{
-            selected==="Buy"? await buyToken(amount.current.value):await sellToken(amount.current.value)
-          }}>{selected}</button>
+          {props.tokenData.trading && <>
+            <div className="amount">
+              <input style={{ width: '100%', fontSize: 'large' }} ref={amount} placeholder="Enter Amount" type="number" min="0"></input>
+              <p id="bal">Balance: {selected==="Buy"?props.currentUSDBal:props.currentTokenBal}</p>
+            </div>
+            {props.tokenData.trading?<><button onClick={ async()=>{
+              selected==="Buy"? await approveTX(USDAddress,amount.current.value,props.tokenData.Address):await approveTX(tokenAD,amount.current.value,props.tokenData.Address)
+            }}>Approve</button>
+            <button onClick={ async()=>{
+              selected==="Buy"? await buyToken(amount.current.value):await sellToken(amount.current.value)
+            }}>{selected}</button></>:<span>Trading has been paused for this token for the purpose of liquidity removal vote head over to Manage Token tab and cast your vote if you are an investor</span>}
+          </>}
         </div>
       </div>
     </div>
