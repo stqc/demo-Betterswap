@@ -14,6 +14,7 @@ import {
 import React from 'react';
 import { getFactoryContract, connectToWeb3 } from './components/source';
 import {useEffect} from 'react';
+import Loading from './components/loading';
 
 export let usdbalupdate;
 export let tokenbalupdate;
@@ -54,6 +55,7 @@ updatetokendata=updateCurrentTrade;
       <Navbar/>
       <NavbarPhone/>
       <Alert/>
+      <Loading/>
       <Routes>
         <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
         <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>

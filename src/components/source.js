@@ -7,6 +7,7 @@ import {updateFunc} from "./Navbar";
 import {updateFuncPhone} from "./Navphone";
 import {usdbalupdate,tokenbalupdate,updatetokendata} from "../App";
 import { contentChanger, visibleMaker } from "./alert.js";
+import { visibleMakerL } from "./loading.js";
 
 let web3;
 let factory;
@@ -80,6 +81,7 @@ const updateBalances =async ()=>{
 }
 
 export const getPool = async (tokenAddress)=>{
+    visibleMakerL("grid");
     tokenAD=tokenAddress
     try{
         pool=null;
@@ -130,7 +132,7 @@ export const getPool = async (tokenAddress)=>{
             }   
         }
             await updatetokendata(poolInfo);    
-        
+        visibleMakerL("none");
         return poolInfo;
     }
     catch(e){
