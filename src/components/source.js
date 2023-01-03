@@ -6,6 +6,7 @@ import { createChart } from "lightweight-charts"
 import {updateFunc} from "./Navbar";
 import {updateFuncPhone} from "./Navphone";
 import {usdbalupdate,tokenbalupdate,updatetokendata} from "../App";
+import { contentChanger, visibleMaker } from "./alert.js";
 
 let web3;
 let factory;
@@ -81,6 +82,7 @@ const updateBalances =async ()=>{
 export const getPool = async (tokenAddress)=>{
     tokenAD=tokenAddress
     try{
+        pool=null;
         var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
         var poolAddress = await factory.methods.TokenToPool(tokenAddress).call();
         pool = await new web3.eth.Contract(poolABI,poolAddress)        
@@ -134,6 +136,7 @@ export const getPool = async (tokenAddress)=>{
     catch(e){
         console.log(e.message);
         try{
+            var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
         poolInfo ={
             Address:"0x0000000000000000000000000000000000000000",
             token2usd: 0,
@@ -149,6 +152,9 @@ export const getPool = async (tokenAddress)=>{
             yesvote:null,
             novote:null
         }
+
+        contentChanger("The searched pool does not exist yet");
+        visibleMaker("grid");
     }
         catch(e){
             console.log(e.message);
@@ -159,9 +165,7 @@ export const getPool = async (tokenAddress)=>{
 
  export const updatePool=async()=>{
     var sup = await tokenSearched.methods.totalSupply().call()/1e18
-    if(poolInfo.Address==="0x0000000000000000000000000000000000000000"){
-        getPool(tokenAD);
-    }else{
+    
         console.log(pool._address);
         poolInfo ={
             Address:pool._address,
@@ -179,7 +183,7 @@ export const getPool = async (tokenAddress)=>{
             novote:await pool.methods.noVotes().call()
         }
        await upChart();
-    }
+ 
     
     await updatetokendata(poolInfo);
     await updateBalances();
@@ -194,8 +198,10 @@ export const buyToken =async (USD)=>{
     try{
         
          var tx= await pool.methods.buyToken(USD).send({from:connectedAccount[0]});
-         return [tx.blockHash];
-    }
+         contentChanger("Transaction Successful");
+         visibleMaker("grid");
+         updatePool();
+        }
     catch(e){
          return [e.message,0];
      }
@@ -207,8 +213,9 @@ export const sellToken =async (USD)=>{
     try{
         
          var tx= await pool.methods.sellToken(USD).send({from:connectedAccount[0]});
-         return [tx.blockHash];
-    }
+         contentChanger("Transaction Successful");
+         visibleMaker("grid");
+         updatePool();    }
     catch(e){
         return [e.message,0];
      }
@@ -220,8 +227,8 @@ export const approveTX = async(tokenToApprove,amount,addressToApprove)=>{
      try{
          var tokenContract = await new web3.eth.Contract(bep20ABI,tokenToApprove);
          var tx= await tokenContract.methods.approve(addressToApprove,amount).send({from:connectedAccount[0]});
-         return [tx.blockHash];
-     }
+         contentChanger("Approval Successful");
+         visibleMaker("grid");     }
      catch(e){
         console.log(e)
          return [e.message,0];
@@ -335,8 +342,8 @@ export const buildChart=async()=>{
 export const requestLiquidityRemoval= async()=>{
     try{
         var tx = await pool.methods.requestLPRemovalDAO().send({from:connectedAccount[0]});
-        return [tx.blockHash];
-    }
+        contentChanger("DAO Voting Started");
+        visibleMaker("grid");    }
     catch(e){
         return e.message;
     }
@@ -344,8 +351,8 @@ export const requestLiquidityRemoval= async()=>{
 
 export const removeLP = async ()=>{
     var tx = await pool.methods.removeLP().send({from:connectedAccount[0]});
-    return [tx.blockHash];
-}
+    contentChanger("Liquidity Removed Successfully");
+    visibleMaker("grid");}
 
 export const addLiquidity= async(USD,Token)=>{
     USD = web3.utils.toWei(USD);
@@ -354,8 +361,8 @@ export const addLiquidity= async(USD,Token)=>{
         var tx = await pool.methods.addLiquidity(Token,USD).send({from:connectedAccount[0]});
         console.log(tx);
         await getPool(tokenAD);
-        return [tx.blockHash];
-    }
+        contentChanger("Liquidity Added Successfully");
+        visibleMaker("grid");    }
     catch(e){
         return [e.message];
     }
@@ -395,8 +402,11 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     thresh=web3.utils.toWei(thresh);
     var tx = await factory.methods.createNewPool(tokenAD,connectedAccount[0],buyTax,sellTax,lptax,thresh,ref).send({from:connectedAccount[0]});
     await getPool(tokenAD);
-     return [tx.blockHash];
- }
+    poolInfo.buytax=Number(buyTax)+Number(lptax);
+    poolInfo.saletax=Number(sellTax)+Number(lptax);
+    
+    contentChanger("Pool created successfully");
+    visibleMaker("grid"); }
 
  export const createToken= async (name_,symbol,supply)=>{
     if(!ref){
@@ -406,8 +416,8 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     try{
 
             var tx = await tokenFactory_.methods.createSimpleToken(name_,symbol,supply).send({from:connectedAccount[0]});
-            return [tx.blockHash];
-        
+            contentChanger("Token created successfully");
+            visibleMaker("grid");        
     }
     catch(e){
         return [e.message,0];
@@ -419,19 +429,21 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
 export const updatePoolTax=async (buy,sell,lp)=>{
     console.log(buy,sell,lp)
    var tx= await pool.methods.updatePoolTax(buy,sell,lp).send({from:connectedAccount[0]});
-   return [tx.blockHash];
+   contentChanger("Trade Taxes Updated");
+   visibleMaker("grid");    
 }
 
 
 export const voteYes = async()=>{
     var tx = await pool.methods.vote(0).send({from:connectedAccount[0]});
-    return [tx.blockHash];
+    contentChanger("Vote Casted");
+    visibleMaker("grid");
 }
 
 export const voteNo = async()=>{
     var tx = await pool.methods.vote(1).send({from:connectedAccount[0]});
-    return [tx.blockHash];
-}
+    contentChanger("Vote Casted");
+    visibleMaker("grid");}
 
 window.addEventListener('resize',()=>{
     document.getElementsByClassName('tv-lightweight-charts')[0].remove();

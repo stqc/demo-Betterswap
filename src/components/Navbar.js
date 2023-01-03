@@ -20,21 +20,21 @@ function Navbar() {
       <div className="logo">
         BetterSwap
       </div>
-      <div className={TradeName}><NavLink activeClassName="nav-options-selected"to="/" onClick={()=>{
+      <div className={TradeName}><NavLink to="/" onClick={()=>{
       
             updateTrade('nav-options-selected')
             updateCreate('nav-options')
             updateManage('nav-options')
       
       }}>Trade</NavLink></div>
-      <div className={createName}><NavLink activeClassName="nav-options-selected" to="/create" onClick={()=>{
+      <div className={createName}><NavLink  to="/create" onClick={()=>{
 
             updateTrade('nav-options')
             updateCreate('nav-options-selected')
             updateManage('nav-options')
           
       }}>Create A Token</NavLink></div>
-      <div className={manageName}><NavLink activeClassName="nav-options-selected" to="/manage" onClick={()=>{
+      <div className={manageName}><NavLink to="/manage" onClick={()=>{
       
             updateTrade('nav-options')
             updateCreate('nav-options')

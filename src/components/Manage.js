@@ -62,6 +62,7 @@ function Manage(props) {
             min="0"
           /> 
         </div>
+        {props.tokenData.usdinpool>0 &&
         <div className="amount" style={{ margin: '2%' }}>
           <input ref={thresh}
             style={{ width: '100%', fontSize: 'large' }}
@@ -69,7 +70,7 @@ function Manage(props) {
             type="number"
             min="0"
           /> 
-        </div>
+        </div>}
         <button style={{ margin: '3%' }} onClick={()=>{
           props.tokenData.Address==="0x0000000000000000000000000000000000000000"?createPool(btx.current.value,stx.current.value,lp.current.value,thresh.current.value):updatePoolTax(btx.current.value,stx.current.value,lp.current.value);
         }}>{props.tokenData.Address==="0x0000000000000000000000000000000000000000"?"Create Pool":"Update Pool"}</button></>:

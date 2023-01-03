@@ -53,7 +53,7 @@ updatetokendata=updateCurrentTrade;
     <Router> 
       <Navbar/>
       <NavbarPhone/>
-      
+      <Alert/>
       <Routes>
         <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
         <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>
