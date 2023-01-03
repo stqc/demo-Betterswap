@@ -2,18 +2,20 @@ import React from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart} from "./source"
+import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame} from "./source"
 
 function TradeContent(props) {
   const [selected,changeSelected] = React.useState('Buy')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
-  const [currentTimeFrame,updateTimeFrame] =React.useState('D');
+  const [currentTimeFrame,updateTimeFrame] =React.useState(frame);
   let amount = React.createRef();
   React.useEffect(()=>{
+    var f=async ()=>{
     if(tokenAD){
-      buildChart();
-    }
+     await  buildChart();
+    }}
+    f();
   },[])
   return (
     <div className="trade-content">

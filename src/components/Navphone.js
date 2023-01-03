@@ -3,7 +3,7 @@ import './css/nav.css';
 import {
   Link
 } from "react-router-dom";
-import { connectToWeb3,getPool } from './source';
+import { connectToWeb3,getPool,buildChart} from './source';
 export let updateFuncPhone;
 
 function NavbarPhone() {
@@ -13,6 +13,7 @@ function NavbarPhone() {
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
     updateFuncPhone=setConnected;
     let searchVal = React.createRef();
+    
 
   return (
     <div className="nav-phone" id="phone">
@@ -37,6 +38,7 @@ function NavbarPhone() {
       <div className="search-p">
         <input placeholder="Enter Token Address" ref={searchVal}></input><button onClick={async()=>{
             await getPool(searchVal.current.value);
+            await buildChart();
         }}>Search</button>
       </div>
     </div>

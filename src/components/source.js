@@ -6,7 +6,7 @@ import { createChart } from "lightweight-charts"
 import {updateFunc} from "./Navbar";
 import {updateFuncPhone} from "./Navphone";
 import {usdbalupdate,tokenbalupdate,updatetokendata} from "../App";
-import { updateNo,updateYes } from "./Manage.js";
+
 let web3;
 let factory;
 export let USDAddress;
@@ -16,7 +16,7 @@ export let tokenAD=null;
 let tokenSearched=null;
 let chart;
 let lineSeries;
-let frame='D';
+export let frame='D';
 var poolInfo={Address:"0x0000000000000000000000000000000000000000",
     token2usd: null,
     usd2token: null,
@@ -28,6 +28,8 @@ var poolInfo={Address:"0x0000000000000000000000000000000000000000",
     usdinpool:null,
     tokeninpool:null,
     trading:true,
+    yesvote:null,
+    novote:null
 };
 var pool;
 let chartData
@@ -38,7 +40,7 @@ let ref= urlParams.get('ref');
 
 export const getFactoryContract = async ()=>{
     web3 = new Web3(window.ethereum);
-    factory = await new web3.eth.Contract(factoryABI,"0x395C3269E78cDcCFE0137509e6FfD647D0C45906");
+    factory = await new web3.eth.Contract(factoryABI,"0xD1600a7e9cd82aEE22d9470fC2F3c30BaD2c587a");
     USDAddress = await factory.methods.usd().call();
     console.log(USDAddress);
     dollar= await new web3.eth.Contract(bep20ABI,USDAddress);
@@ -48,15 +50,15 @@ export const connectToWeb3 = async ()=>{
 
     await window.ethereum.request({method:"eth_requestAccounts"});
     connectedAccount = await web3.eth.getAccounts();
-    updateFunc(connectedAccount[0].slice(0,10)+"...");
-    updateFuncPhone(connectedAccount[0].slice(0,10)+"...");
+    await updateFunc(connectedAccount[0].slice(0,10)+"...");
+    await updateFuncPhone(connectedAccount[0].slice(0,10)+"...");
     await updateBalances();
 
     const subscription = web3.eth.subscribe(
         "newBlockHeaders",
         async (err, result) => {
             if(tokenAD!=null){ 
-                updatePool();  
+                await updatePool();  
             }
              }
        );
@@ -77,20 +79,18 @@ const updateBalances =async ()=>{
 }
 
 export const getPool = async (tokenAddress)=>{
-    pool=null;
     tokenAD=tokenAddress
-    var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
     try{
-        tokenAD = tokenAddress;
+        var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
         var poolAddress = await factory.methods.TokenToPool(tokenAddress).call();
-        if(!pool){
-            pool = await new web3.eth.Contract(poolABI,poolAddress)
-        }
-        
+        pool = await new web3.eth.Contract(poolABI,poolAddress)        
+        tokenAD = tokenAddress;        
+        console.log(pool._address);
         tokenSearched=bep20;
         await updateBalances();
         var sup = await bep20.methods.totalSupply().call()/1e18
                 try{
+                    console.log("try")
                     poolInfo ={
                     Address:pool._address,
                     token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
@@ -102,12 +102,13 @@ export const getPool = async (tokenAddress)=>{
                     ben: await pool.methods.beneficiery().call(),
                     usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
                     tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                    trading: await pool.methods.tradingEnabled().call()
+                    trading: await pool.methods.tradingEnabled().call(),
+                    yesvote:await pool.methods.yesVotes().call(),
+                    novote:await pool.methods.noVotes().call()
                 }  
                 console.log(poolInfo.trading);
-                updatetokendata(poolInfo);
-                updateNo(await pool.methods.noVotes().call());
-                updateYes(await pool.methods.yesVotes().call());
+                await updatetokendata(poolInfo);
+                
         }
         catch (e){
             poolInfo ={
@@ -121,10 +122,12 @@ export const getPool = async (tokenAddress)=>{
                 ben: await pool.methods.beneficiery().call(),
                 usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
                 tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                trading: await pool.methods.tradingEnabled().call()
+                trading: await pool.methods.tradingEnabled().call(),
+                yesvote:await pool.methods.yesVotes().call(),
+                novote:await pool.methods.noVotes().call()
             }   
         }
-            updatetokendata(poolInfo);    
+            await updatetokendata(poolInfo);    
         
         return poolInfo;
     }
@@ -140,37 +143,49 @@ export const getPool = async (tokenAddress)=>{
             name: await bep20.methods.name().call(),
             supply: sup.toLocaleString(),
             ben: null,
-            usdinpool: null,
-            tokeninpool: null,
-            trading: true
+            usdinpool: 0,
+            tokeninpool:0,
+            trading: true,
+            yesvote:null,
+            novote:null
         }
-        updatetokendata(poolInfo);}
+    }
         catch(e){
             console.log(e.message);
         }
-    } 
+    }
+    await updatePool(); 
 }
 
-const updatePool=async()=>{
+ export const updatePool=async()=>{
     var sup = await tokenSearched.methods.totalSupply().call()/1e18
-    poolInfo ={
-        Address:pool._address,
-        token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
-        usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
-        buytax: await pool.methods.totalBuyTax().call(),
-        saletax: await pool.methods.totalSaleTax().call(),
-        name: await tokenSearched.methods.name().call(),
-        supply: sup.toLocaleString(),
-        ben: await pool.methods.beneficiery().call(),
-        usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-        tokeninpool: (await tokenSearched.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-        trading: await pool.methods.tradingEnabled().call()
+    if(poolInfo.Address==="0x0000000000000000000000000000000000000000"){
+        getPool(tokenAD);
+    }else{
+        console.log(pool._address);
+        poolInfo ={
+            Address:pool._address,
+            token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
+            usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
+            buytax: await pool.methods.totalBuyTax().call(),
+            saletax: await pool.methods.totalSaleTax().call(),
+            name: await tokenSearched.methods.name().call(),
+            supply: sup.toLocaleString(),
+            ben: await pool.methods.beneficiery().call(),
+            usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+            tokeninpool: (await tokenSearched.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+            trading: await pool.methods.tradingEnabled().call(),
+            yesvote:await pool.methods.yesVotes().call(),
+            novote:await pool.methods.noVotes().call()
         }
-    updatetokendata(poolInfo);
+       await upChart();
+    }
+    
+    await updatetokendata(poolInfo);
     await updateBalances();
-    updateNo(await pool.methods.noVotes().call());
-    updateYes(await pool.methods.yesVotes().call());
-    upChart();
+    
+    
+    
 }
 
 export const buyToken =async (USD)=>{
@@ -268,13 +283,13 @@ const upChart = async ()=>{
     }
     chartData=data
     console.log(data)
-    lineSeries.setData(data); 
+    await lineSeries.setData(data); 
 }
 
-export const changeFrame = (fr)=>{
+export const changeFrame = async (fr)=>{
     console.log(fr)
     frame=fr
-    upChart();
+    await upChart();
 }
 
 export const buildChart=async()=>{
@@ -314,17 +329,22 @@ export const buildChart=async()=>{
             });    
     lineSeries = chart.addCandlestickSeries();
     
-    lineSeries.setData(data);
+   await lineSeries.setData(data);
 }
 
 export const requestLiquidityRemoval= async()=>{
     try{
         var tx = await pool.methods.requestLPRemovalDAO().send({from:connectedAccount[0]});
-        return tx.blockHash;
+        return [tx.blockHash];
     }
     catch(e){
         return e.message;
     }
+}
+
+export const removeLP = async ()=>{
+    var tx = await pool.methods.removeLP().send({from:connectedAccount[0]});
+    return [tx.blockHash];
 }
 
 export const addLiquidity= async(USD,Token)=>{
@@ -371,8 +391,10 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
         ref=factory._address;
         console.log(ref);
     }
+    console.log(buyTax,sellTax,lptax);
     thresh=web3.utils.toWei(thresh);
     var tx = await factory.methods.createNewPool(tokenAD,connectedAccount[0],buyTax,sellTax,lptax,thresh,ref).send({from:connectedAccount[0]});
+    await getPool(tokenAD);
      return [tx.blockHash];
  }
 
@@ -380,7 +402,7 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     if(!ref){
         ref=factory._address;
         console.log(ref);
-    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0x26C36ab5BD8fbd96Ca05146c163258c4D9EA97DC");
+    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0x57dd8B37d85188a8127b8cd8aF631d173Db3f9bE");
     try{
 
             var tx = await tokenFactory_.methods.createSimpleToken(name_,symbol,supply).send({from:connectedAccount[0]});
@@ -395,18 +417,20 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
 }
 
 export const updatePoolTax=async (buy,sell,lp)=>{
-   var tx= pool.methods.updatePoolTax(buy,sell,lp).send({from:connectedAccount[0]});
+    console.log(buy,sell,lp)
+   var tx= await pool.methods.updatePoolTax(buy,sell,lp).send({from:connectedAccount[0]});
    return [tx.blockHash];
 }
 
 
 export const voteYes = async()=>{
-    var tx = pool.methods.vote(0).send({from:connectedAccount[0]});
+    var tx = await pool.methods.vote(0).send({from:connectedAccount[0]});
     return [tx.blockHash];
 }
 
 export const voteNo = async()=>{
-    var tx = pool.methods.vote(1).send({from:connectedAccount[0]});
+    var tx = await pool.methods.vote(1).send({from:connectedAccount[0]});
+    return [tx.blockHash];
 }
 
 window.addEventListener('resize',()=>{
@@ -440,6 +464,8 @@ window.addEventListener('resize',()=>{
 window.ethereum.on("accountsChanged",async (acc)=>{
     connectedAccount[0]=acc[0];
     console.log(connectedAccount);
-    updateFunc(connectedAccount[0].slice(0,10)+"...");
+    await updateFunc(connectedAccount[0].slice(0,10)+"...");
+    await updateBalances();
+
   })
   

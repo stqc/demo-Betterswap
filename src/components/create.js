@@ -21,11 +21,11 @@ function CreateToken(){
           <input ref={tksup}style={{ width: '100%', fontSize: 'large' }} placeholder="Enter Token Supply" type="number" min="0"></input>
         </div>
             <button style={{margin: "3%" }} onClick={async ()=>{
-                await approveTX(USDAddress,"20","0x26C36ab5BD8fbd96Ca05146c163258c4D9EA97DC");
+                await approveTX(USDAddress,"20","0x57dd8B37d85188a8127b8cd8aF631d173Db3f9bE");
             }}>Approve USD</button>
             <button style={{margin: "0.5% 3% 2% 3%" }}
-            onClick={()=>{
-              createToken(tkname.current.value,tkym.current.value,tksup.current.value)
+            onClick={async ()=>{
+              await createToken(tkname.current.value,tkym.current.value,tksup.current.value)
             }}> Create Token</button>
 
         </div>

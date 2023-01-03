@@ -1,9 +1,9 @@
 import React from 'react';
 import './css/nav.css';
 import {
-     Link
+     NavLink
    } from "react-router-dom";
-import { connectToWeb3,getPool } from './source';
+import { connectToWeb3,getPool, buildChart } from './source';
 export let updateFunc
 function Navbar() {
     
@@ -20,27 +20,34 @@ function Navbar() {
       <div className="logo">
         BetterSwap
       </div>
-      <div className={TradeName}><Link to="/" onClick={()=>{
+      <div className={TradeName}><NavLink activeClassName="nav-options-selected"to="/" onClick={()=>{
+      
             updateTrade('nav-options-selected')
             updateCreate('nav-options')
             updateManage('nav-options')
-      }}>Trade</Link></div>
-      <div className={createName}><Link to="/create" onClick={()=>{
+      
+      }}>Trade</NavLink></div>
+      <div className={createName}><NavLink activeClassName="nav-options-selected" to="/create" onClick={()=>{
+
             updateTrade('nav-options')
             updateCreate('nav-options-selected')
             updateManage('nav-options')
-      }}>Create A Token</Link></div>
-      <div className={manageName}><Link to="/manage" onClick={()=>{
+          
+      }}>Create A Token</NavLink></div>
+      <div className={manageName}><NavLink activeClassName="nav-options-selected" to="/manage" onClick={()=>{
+      
             updateTrade('nav-options')
             updateCreate('nav-options')
             updateManage('nav-options-selected')
-      }}>Manage Token</Link></div>
+          
+      }}>Manage Token</NavLink></div>
       <div className="nav-options-btn" onClick={async()=>{
         await connectToWeb3();
       }}>{currentConnected}</div>
       <div className="search">
         <input placeholder="Enter Token Address" ref={searchVal}></input><button onClick={async()=>{
             await getPool(searchVal.current.value);
+            await buildChart();
         }}>Search</button>
       </div>
       <div className="arrow" onClick={()=>{

@@ -5,6 +5,7 @@ import NavbarPhone from './components/Navphone';
 import TradeContent from './components/TradeContent';
 import Manage from './components/Manage';
 import CreateToken from './components/create';
+import Alert from './components/alert';
 import {
   BrowserRouter as Router,
   Routes,
@@ -42,7 +43,9 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
     saletax:null,
     usdinpool:null,
     tokeninpool:null,
-    trading:true
+    trading:true,
+    yesvote:null,
+    novote:null
   };
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
 updatetokendata=updateCurrentTrade;
@@ -50,6 +53,7 @@ updatetokendata=updateCurrentTrade;
     <Router> 
       <Navbar/>
       <NavbarPhone/>
+      
       <Routes>
         <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
         <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>

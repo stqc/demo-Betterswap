@@ -1,0 +1,15 @@
+.alert-seq{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 10;
+    padding: 10%;
+}
+
+.alert-content{
+    display: flex;
+    background-color: #3C444C;
+    flex-direction: column;
+    
+}

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import { requestLiquidityRemoval,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes} from './source';
+import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, updatePool} from './source';
 
 export let updateYes;
 export let updateNo;
@@ -11,8 +11,7 @@ function Manage(props) {
   const [selected,changeSelected] = React.useState('Add Liquidity')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
-  const [yesVotes,updateYesvotes] = React.useState(0);
-  const [noVotes,updateNoVotes] = React.useState(0);
+
 
   let usdAMT = React.createRef();
   let tokenAMT= React.createRef();
@@ -20,8 +19,14 @@ function Manage(props) {
   let stx=React.createRef();
   let lp=React.createRef();
   let thresh=React.createRef();
-  updateNo=updateNoVotes;
-  updateYes=updateYesvotes;
+
+  useEffect(()=>{
+    var f = async()=>{
+        if(props.tokenData.Address!="0x0000000000000000000000000000000000000000")
+        await updatePool();
+    }
+    f();
+  },[])
 
   return(
     <div className="trade-content">
@@ -73,14 +78,14 @@ function Manage(props) {
         <br />
         If you happen to hold DAO token for this project please cast your vote below..
         <br/><br/>NOTE: You can only vote once
-        <br/><br/>Current Votes in Favour: {yesVotes}
-        <br/><br/>Current Votes Against: {noVotes}
+        <br/><br/>Current Votes in Favour: {props.tokenData.yesvote}
+        <br/><br/>Current Votes Against: {props.tokenData.novote}
       </span>
-        <button onClick={()=>{
-          voteYes();
+        <button onClick={async ()=>{
+          await voteYes();
         }}style={{margin:"2%"}}>Vote in Favour</button>
-        <button onClick={()=>{
-          voteNo();
+        <button onClick={async ()=>{
+          await voteNo();
         }}style={{margin:"2%"}}>Vote Against</button>
         </>
         }
@@ -144,17 +149,19 @@ function Manage(props) {
                         <input ref={tokenAMT}style={{width: "100%", fontSize: "large"}} placeholder="Enter Token Amount" type="number" min="0"></input>
 					              <p id="bal">Balance: {props.currentTokenBal}</p>
                     </div>
-                    <button onClick={()=>{
-                      approveTX(USDAddress,usdAMT.current.value,props.tokenData.Address);
+                    <button onClick={async ()=>{
+                      await approveTX(USDAddress,usdAMT.current.value,props.tokenData.Address);
                     }}>Approve USD</button>
-                    <button onClick={()=>{
-                      approveTX(tokenAD,tokenAMT.current.value,props.tokenData.Address);
+                    <button onClick={async()=>{
+                      await approveTX(tokenAD,tokenAMT.current.value,props.tokenData.Address);
                     }}>Approve Token</button>
                   </>
                 }
-                <button onClick={()=>{
-                    selected==="Add Liquidity"?addLiquidity(usdAMT.current.value,tokenAMT.current.value):requestLiquidityRemoval();
-                }}>{props.tokenData.trading?selected:"Remove Liquidity"}</button>
+                {props.tokenData.trading ?<button onClick={async()=>{
+                    selected==="Add Liquidity"?await addLiquidity(usdAMT.current.value,tokenAMT.current.value):await requestLiquidityRemoval();
+                }}>{selected}</button>:<button onClick={async()=>{
+                  selected==="Add Liquidity"?alert("Liquidity cannot be added because of trading being paused."):await removeLP();
+              }}>{selected==="Add Liquidity"?selected:"Remove Liquidity"}</button>}
         </div>
         </div>
         </div>
