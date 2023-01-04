@@ -62,7 +62,7 @@ function Manage(props) {
             min="0"
           /> 
         </div>
-        {props.tokenData.usdinpool>0 &&
+        {props.tokenData.usdinpool<=0 &&
         <div className="amount" style={{ margin: '2%' }}>
           <input ref={thresh}
             style={{ width: '100%', fontSize: 'large' }}

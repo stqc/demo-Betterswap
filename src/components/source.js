@@ -42,7 +42,7 @@ let ref= urlParams.get('ref');
 
 export const getFactoryContract = async ()=>{
     web3 = new Web3(window.ethereum);
-    factory = await new web3.eth.Contract(factoryABI,"0xD1600a7e9cd82aEE22d9470fC2F3c30BaD2c587a");
+    factory = await new web3.eth.Contract(factoryABI,"0x52B6A7AC3afddE908b5544A701775791Fe9217A3");
     USDAddress = await factory.methods.usd().call();
     console.log(USDAddress);
     dollar= await new web3.eth.Contract(bep20ABI,USDAddress);
@@ -112,7 +112,8 @@ export const getPool = async (tokenAddress)=>{
                 }  
                 console.log(poolInfo.trading);
                 await updatetokendata(poolInfo);
-                
+                visibleMakerL("none");
+
         }
         catch (e){
             poolInfo ={
@@ -130,9 +131,12 @@ export const getPool = async (tokenAddress)=>{
                 yesvote:await pool.methods.yesVotes().call(),
                 novote:await pool.methods.noVotes().call()
             }   
+            visibleMakerL("none");
+
         }
-            await updatetokendata(poolInfo);    
         visibleMakerL("none");
+
+            await updatetokendata(poolInfo);    
         return poolInfo;
     }
     catch(e){
@@ -154,7 +158,7 @@ export const getPool = async (tokenAddress)=>{
             yesvote:null,
             novote:null
         }
-
+        visibleMakerL("none");
         contentChanger("The searched pool does not exist yet");
         visibleMaker("grid");
     }
@@ -162,6 +166,7 @@ export const getPool = async (tokenAddress)=>{
             console.log(e.message);
         }
     }
+    visibleMakerL("none");
     await updatePool(); 
 }
 

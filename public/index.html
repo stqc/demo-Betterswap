@@ -30,12 +30,15 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <div class="chart-content" id="warn" style="padding: 2%; text-align: center; margin: 2%;">
+      Thank you for choosing BetterSwap for your Defi needs,<br>But your current browser not supported.<br> Please use a web3 enabled browser, such as Metamask, Brave, TrustWallet..etc
+    </div>
     <footer>
       <div className="footer-option">BetterSwap..the better way to swap</div>
       <div className="logo">BetterSwap</div>
       <div className="footer-option">
-        <a href="#" target="_blank">Docs</a>
-        <a href="#" target="_blank">Discord</a>
+        <a href="https://docs.betterswap.fi" target="_blank">Docs</a>
+        <a href="https://discord.gg/csWKReAdjj" target="_blank">Discord</a>
         <a href="#" target="_blank">Twitter</a>
       </div>
 
@@ -51,4 +54,9 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    if(window.ethereum){
+      document.getElementById("warn").style.display="none";
+    }
+  </script>
 </html>
