@@ -31,7 +31,8 @@ var poolInfo={Address:"0x0000000000000000000000000000000000000000",
     tokeninpool:null,
     trading:true,
     yesvote:null,
-    novote:null
+    novote:null,
+    thresh:null,
 };
 var pool;
 let chartData
@@ -83,6 +84,22 @@ const updateBalances =async ()=>{
 export const getPool = async (tokenAddress)=>{
     visibleMakerL("grid");
     tokenAD=tokenAddress
+    poolInfo={
+        Address:"0x0000000000000000000000000000000000000000",
+        token2usd: null,
+        usd2token: null,
+        buytax: null,
+        saletax: null,
+        name:null,
+        supply:null,
+        ben: null,
+        usdinpool:null,
+        tokeninpool:null,
+        trading:true,
+        yesvote:null,
+        novote:null,
+        thresh:null,
+    };
     try{
         pool=null;
         var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
@@ -108,7 +125,8 @@ export const getPool = async (tokenAddress)=>{
                     tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
                     trading: await pool.methods.tradingEnabled().call(),
                     yesvote:await pool.methods.yesVotes().call(),
-                    novote:await pool.methods.noVotes().call()
+                    novote:await pool.methods.noVotes().call(),
+                    thresh:await pool.methods.DAOThreshold().call()/1e18
                 }  
                 console.log(poolInfo.trading);
                 await updatetokendata(poolInfo);
@@ -129,7 +147,8 @@ export const getPool = async (tokenAddress)=>{
                 tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
                 trading: await pool.methods.tradingEnabled().call(),
                 yesvote:await pool.methods.yesVotes().call(),
-                novote:await pool.methods.noVotes().call()
+                novote:await pool.methods.noVotes().call(),
+                thresh:await pool.methods.DAOThreshold().call()/1e18
             }   
             visibleMakerL("none");
 
@@ -156,7 +175,8 @@ export const getPool = async (tokenAddress)=>{
             tokeninpool:0,
             trading: true,
             yesvote:null,
-            novote:null
+            novote:null,
+            thresh:null
         }
         visibleMakerL("none");
         contentChanger("The searched pool does not exist yet");
@@ -187,7 +207,8 @@ export const getPool = async (tokenAddress)=>{
             tokeninpool: (await tokenSearched.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
             trading: await pool.methods.tradingEnabled().call(),
             yesvote:await pool.methods.yesVotes().call(),
-            novote:await pool.methods.noVotes().call()
+            novote:await pool.methods.noVotes().call(),
+            thresh: await pool.methods.DAOThreshold().call()/1e18
         }
        await upChart();
  
@@ -197,6 +218,11 @@ export const getPool = async (tokenAddress)=>{
     
     
     
+}
+
+export const getMaxBalance= async (TKaddress)=>{
+    var bep20 = await new web3.eth.Contract(bep20ABI,TKaddress);
+    return await bep20.methods.balanceOf(connectedAccount[0]).call()/1e18;    
 }
 
 export const buyToken =async (USD)=>{

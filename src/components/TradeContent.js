@@ -2,13 +2,14 @@ import React from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame} from "./source"
+import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance} from "./source"
 
 function TradeContent(props) {
   const [selected,changeSelected] = React.useState('Buy')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
   const [currentTimeFrame,updateTimeFrame] =React.useState(frame);
+  const [apprtxt,changeapprtxt] = React.useState("Approve Amount");
   let amount = React.createRef();
   React.useEffect(()=>{
     var f=async ()=>{
@@ -93,17 +94,26 @@ function TradeContent(props) {
               <div>Token in Pool:</div>
               <div id="tokenin">{props.tokenData.tokeninpool}</div>
             </div>
+            <div>
+              <div>DAO Threshold:</div>
+              <div id="tokenin">{props.tokenData.thresh}</div>
+            </div>
           </div>
           {props.tokenData.trading && <>
             <div className="amount">
               <input style={{ width: '100%', fontSize: 'large' }} ref={amount} placeholder="Enter Amount" type="number" min="0"></input>
-              <p id="bal">Balance: {selected==="Buy"?props.currentUSDBal:props.currentTokenBal}</p>
+              <><p style={{display:"flex",justifyContent:"space-between", alignItems:"center",    margin: "0px 5px 0.5px 5px"}} id="bal">Balance: {selected==="Buy"?props.currentUSDBal:props.currentTokenBal} <p style={{cursor:"pointer"}} onClick={async()=>{
+                selected=="Buy"?amount.current.value =await getMaxBalance(USDAddress):amount.current.value =await getMaxBalance(tokenAD);
+              }}>MAX</p></p>
+              </>
             </div>
             {props.tokenData.trading?<><button onClick={ async()=>{
               selected==="Buy"? await approveTX(USDAddress,amount.current.value,props.tokenData.Address):await approveTX(tokenAD,amount.current.value,props.tokenData.Address)
-            }}>Approve</button>
+              changeapprtxt("Amount Approved");
+            }}>{apprtxt}</button>
             <button onClick={ async()=>{
-              selected==="Buy"? await buyToken(amount.current.value):await sellToken(amount.current.value)
+              selected==="Buy"? await buyToken(amount.current.value):await sellToken(amount.current.value);
+              changeapprtxt("Approve Amount");
             }}>{selected}</button></>:<span>Trading has been paused for this token for the purpose of liquidity removal vote head over to Manage Token tab and cast your vote if you are an investor</span>}
           </>}
         </div>

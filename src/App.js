@@ -46,7 +46,8 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
     tokeninpool:null,
     trading:true,
     yesvote:null,
-    novote:null
+    novote:null,
+    thresh:null,
   };
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
 updatetokendata=updateCurrentTrade;

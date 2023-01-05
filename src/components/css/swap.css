@@ -74,6 +74,7 @@
 }
 .amount>input{
     margin-left: 5px;
+    margin-top: 0%;
 }
 .chart-content>button,.amount>button,.swp-main>button{
     background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);

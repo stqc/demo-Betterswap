@@ -15,6 +15,7 @@ nav{
 .logo{
     font-weight: bolder;
     font-size: larger;
+    line-height: 2.5;
 }
 nav>div{
     padding: 1%;

@@ -4,7 +4,10 @@ import {
      NavLink
    } from "react-router-dom";
 import { connectToWeb3,getPool, buildChart } from './source';
+import logo from "./Xgczj6_2_.svg";
+
 export let updateFunc
+
 function Navbar() {
     
     const [currentDisplay,updateDisplay] = React.useState('none');
@@ -18,6 +21,7 @@ function Navbar() {
   return (
     <nav>
       <div className="logo">
+        <img height="50vh" src={logo} style={{float:"left"}}></img>
         BetterSwap
       </div>
       <div className={TradeName}><NavLink to="/" onClick={()=>{

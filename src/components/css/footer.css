@@ -21,12 +21,16 @@ footer{
     text-decoration: none;
     color: #CBCFD4;
 }
+
 @media screen and (max-width:900px){
 
     footer{
         
         flex-direction: column;
         align-items: center;
+    }
+    #blah{
+        margin: 15% 1%;
     }
     
 }

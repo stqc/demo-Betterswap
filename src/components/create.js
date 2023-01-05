@@ -6,7 +6,7 @@ function CreateToken(){
     let tkname = React.createRef();
     let tkym = React.createRef();
     let tksup =React.createRef();
-
+    const [apprtxt,changeapprtxt]=React.useState("Approve Token Creation Fee");
     return (
         <div className="trade-content">
       <div className="chart-content">
@@ -22,10 +22,12 @@ function CreateToken(){
         </div>
             <button style={{margin: "3%" }} onClick={async ()=>{
                 await approveTX(USDAddress,"20","0x57dd8B37d85188a8127b8cd8aF631d173Db3f9bE");
-            }}>Approve USD</button>
+                changeapprtxt("USD Fee Approved")
+            }}>{apprtxt}</button>
             <button style={{margin: "0.5% 3% 2% 3%" }}
             onClick={async ()=>{
               await createToken(tkname.current.value,tkym.current.value,tksup.current.value)
+              changeapprtxt("Approve Token Creation Fee")
             }}> Create Token</button>
 
         </div>
@@ -40,10 +42,7 @@ function CreateToken(){
                         <li>Approve USD for a small fee of $20 and then create your token!</li>
                         <li>Once the token is created head on over to Manage Token tab and create your pool to trade on BetterSwap!</li>
                     </ul>
-                    <h3>You don't need to hire expensive developers anymore, BetterSwap has you covered!</h3>
-                    <h4>NOTE: The total tax cannot exceed more than 30%</h4>
-                </div>
-                
+                </div>                
             </div>
         </div>
     </div>

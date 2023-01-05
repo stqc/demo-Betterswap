@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, updatePool} from './source';
+import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, updatePool,getMaxBalance} from './source';
 
 export let updateYes;
 export let updateNo;
@@ -36,7 +36,8 @@ function Manage(props) {
           Following are the required methods necessary for pool creation
           <br />
           These methods can be updated after the creation of the pool
-          <br/> <h5>Incase of creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created go ahead and add the liquidity as required</h5>
+          <br/> <h5>For creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created you may add the liquidity as required</h5>
+          <h4 style={{color:"rgb(255,16,27)"}}>NOTE: The total tax cannot exceed more than 30%</h4>
         </span>
         <div className="amount" style={{ margin: '2%' }}>
           <input
@@ -138,17 +139,26 @@ function Manage(props) {
               <div>Token in Pool:</div>
               <div id="tokenin">{props.tokenData.tokeninpool}</div>
             </div>
+            <div>
+              <div>DAO Threshold:</div>
+              <div id="tokenin">{props.tokenData.thresh}</div>
+            </div>
           </div>
           
                 { selected==="Add Liquidity" &&
                   <>
                     <div className="amount">
-                        <input ref={usdAMT}style={{width: "100%", fontSize: "large", paddingTop:"0.5%"}} placeholder="Enter USD Amount" type="number" min="0"></input>
-                        <p id="bal">Balance: {props.currentUSDBal}</p>
+                        <input ref={usdAMT}style={{width: "100%", fontSize: "large", paddingTop:"0.5%",marginLeft:"5px",marginTop:"0px"}} placeholder="Enter USD Amount" type="number" min="0"></input>
+                        <p style={{display:"flex",justifyContent:"space-between", alignItems:"center",margin: "0px 5px 0.5px 5px"}} id="bal">Balance: {props.currentUSDBal} <p style={{cursor:"pointer"}} onClick={ async()=>{
+                          usdAMT.current.value= await getMaxBalance(USDAddress);
+                        }}>MAX</p></p>
                     </div>
                     <div className="amount">
-                        <input ref={tokenAMT}style={{width: "100%", fontSize: "large"}} placeholder="Enter Token Amount" type="number" min="0"></input>
-					              <p id="bal">Balance: {props.currentTokenBal}</p>
+                        <input ref={tokenAMT}style={{width: "100%", fontSize: "large",marginTop:"0px"}} placeholder="Enter Token Amount" type="number" min="0"></input>
+					              <p style={{display:"flex",justifyContent:"space-between", alignItems:"center",margin: "0px 5px 0.5px 5px"}} id="bal">Balance: {props.currentTokenBal} <p style={{cursor:"pointer"}} onClick={async ()=>{
+                          
+                            tokenAMT.current.value= await getMaxBalance(tokenAD);  
+                        }}>MAX</p></p>
                     </div>
                     <button onClick={async ()=>{
                       await approveTX(USDAddress,usdAMT.current.value,props.tokenData.Address);
