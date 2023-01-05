@@ -42,6 +42,7 @@ function NavbarPhone() {
         <input placeholder="Enter Token Address" onClick={()=>{
           updateScroll("block")
         }}ref={searchVal}></input><button onClick={async()=>{
+          updateScroll("none")
             await getPool(searchVal.current.value);
             await buildChart();
         }}>Search</button>

@@ -21,10 +21,10 @@ function Navbar() {
     updateFunc=setConnected;
   return (
     <nav>
-      <div className="logo">
+      <a href="https://betterswap.fi" target="_blank"><div className="logo">
         <img height="50vh" src={logo} style={{float:"left"}}></img>
         BetterSwap
-      </div>
+      </div></a>
       <div className={TradeName}><NavLink to="/" onClick={()=>{
       
             updateTrade('nav-options-selected')
@@ -53,6 +53,7 @@ function Navbar() {
         <input placeholder="Enter Token Address" onClick={()=>{
           updateScroll("block")
         }} ref={searchVal}></input><button onClick={async()=>{
+          updateScroll("none")
             await getPool(searchVal.current.value);
             await buildChart();
         }}>Search</button>
