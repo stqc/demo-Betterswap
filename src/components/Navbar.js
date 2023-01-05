@@ -5,7 +5,7 @@ import {
    } from "react-router-dom";
 import { connectToWeb3,getPool, buildChart } from './source';
 import logo from "./Xgczj6_2_.svg";
-
+import TokenList from './searchOption';
 export let updateFunc
 
 function Navbar() {
@@ -15,6 +15,7 @@ function Navbar() {
     const [createName,updateCreate] =React.useState('nav-options');
     const [manageName,updateManage] =React.useState('nav-options');
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
+    const [scrollBar,updateScroll] = React.useState("none");
     let searchVal = React.createRef();
 
     updateFunc=setConnected;
@@ -49,11 +50,17 @@ function Navbar() {
         await connectToWeb3();
       }}>{currentConnected}</div>
       <div className="search">
-        <input placeholder="Enter Token Address" ref={searchVal}></input><button onClick={async()=>{
+        <input placeholder="Enter Token Address" onClick={()=>{
+          updateScroll("block")
+        }} ref={searchVal}></input><button onClick={async()=>{
             await getPool(searchVal.current.value);
             await buildChart();
         }}>Search</button>
+        <div className='dropDown' style={{position:"absolute",maxWidth:"1%", display:scrollBar}}>
+          <TokenList changeScroll ={updateScroll} searc={searchVal}/>
+        </div>
       </div>
+      
       <div className="arrow" onClick={()=>{
         currentDisplay==='none'?updateDisplay("flex"):updateDisplay("none");
         document.getElementById("phone").style.display=currentDisplay

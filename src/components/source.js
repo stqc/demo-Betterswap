@@ -134,6 +134,9 @@ export const getPool = async (tokenAddress)=>{
 
         }
         catch (e){
+            console.log("catching")
+            var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
+            var sup = await bep20.methods.totalSupply().call()/1e18
             poolInfo ={
                 Address:pool._address,
                 token2usd: 0,
@@ -142,15 +145,17 @@ export const getPool = async (tokenAddress)=>{
                 saletax: 0,
                 name: await bep20.methods.name().call(),
                 supply: sup.toLocaleString(),
-                ben: await pool.methods.beneficiery().call(),
-                usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                trading: await pool.methods.tradingEnabled().call(),
-                yesvote:await pool.methods.yesVotes().call(),
-                novote:await pool.methods.noVotes().call(),
-                thresh:await pool.methods.DAOThreshold().call()/1e18
+                ben: null,
+                usdinpool: 0,
+                tokeninpool: 0,
+                trading: true,
+                yesvote:0,
+                novote:0,
+                thresh:0
             }   
-            visibleMakerL("none");
+        visibleMakerL("none");
+        contentChanger("The searched pool does not exist yet");
+        visibleMaker("grid");
 
         }
         visibleMakerL("none");

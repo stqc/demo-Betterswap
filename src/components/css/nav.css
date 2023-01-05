@@ -47,7 +47,25 @@ border:1px solid #747D88;
     padding-bottom: 0.5%;
     border-radius: 20px;
 }
-
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #373535; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+  
 input{
     background-color: transparent;
     border: 0px;
@@ -96,6 +114,28 @@ border-color: transparent;
 background-repeat:no-repeat ;
 }
 
+.list-content{
+    margin-top: 1%;
+    background:#3C444C;
+    display: flex;
+    width: 16rem;
+    flex-direction: column;
+    border: 1px solid black;
+    cursor: pointer;
+    max-height: 200px;
+    overflow-y: scroll;
+    z-index: 10;
+}
+
+.token-Name{
+    color: white;
+    font-size: large;
+    margin: 2% 4%;
+}
+.token-address{
+    font-size: small;
+    margin: 2% 4%;
+}
 .arrow{
     border:solid #747D88;
     border-width: 0px 4px 4px 0px;

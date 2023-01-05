@@ -4,6 +4,7 @@ import {
   Link
 } from "react-router-dom";
 import { connectToWeb3,getPool,buildChart} from './source';
+import TokenList from './searchOption';
 export let updateFuncPhone;
 
 function NavbarPhone() {
@@ -11,6 +12,8 @@ function NavbarPhone() {
     const [createName,updateCreate] =React.useState('nav-options-p');
     const [manageName,updateManage] =React.useState('nav-options-p');
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
+    const [scrollBar,updateScroll] = React.useState("none");
+
     updateFuncPhone=setConnected;
     let searchVal = React.createRef();
     
@@ -36,10 +39,15 @@ function NavbarPhone() {
         await connectToWeb3();
       }}>{currentConnected}</div>
       <div className="search-p">
-        <input placeholder="Enter Token Address" ref={searchVal}></input><button onClick={async()=>{
+        <input placeholder="Enter Token Address" onClick={()=>{
+          updateScroll("block")
+        }}ref={searchVal}></input><button onClick={async()=>{
             await getPool(searchVal.current.value);
             await buildChart();
         }}>Search</button>
+        <div className='dropDown' style={{position:"absolute",maxWidth:"1%", zIndex:"10",display:scrollBar}}>
+          <TokenList changeScroll ={updateScroll} searc={searchVal}/>
+        </div>
       </div>
     </div>
   );
