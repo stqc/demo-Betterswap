@@ -4,12 +4,12 @@ import "./css/nav.css";
 import { getPool,buildChart } from "./source";
 
 export default function TokenList (props){
-   var keys= Object.keys(data);
+   var keys= Object.keys(data);   
     return (
         <div className="list-content">
             { 
                 keys.map((element) => {
-                    return (<div onClick={()=>{
+                    return (<div key={element} onClick={()=>{
                         props.changeScroll("none");
                         props.searc.current.value=element;
                         getPool(element);

@@ -7,7 +7,7 @@ import { connectToWeb3,getPool, buildChart } from './source';
 import logo from "./Xgczj6_2_.svg";
 import TokenList from './searchOption';
 export let updateFunc
-
+export var scroll;
 function Navbar() {
     
     const [currentDisplay,updateDisplay] = React.useState('none');
@@ -17,7 +17,7 @@ function Navbar() {
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
     const [scrollBar,updateScroll] = React.useState("none");
     let searchVal = React.createRef();
-
+    scroll=updateScroll;
     updateFunc=setConnected;
   return (
     <nav>

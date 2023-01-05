@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar';
-import NavbarPhone from './components/Navphone';
+import NavbarPhone, { scrollP } from './components/Navphone';
 import TradeContent from './components/TradeContent';
 import Manage from './components/Manage';
 import CreateToken from './components/create';
@@ -15,6 +15,7 @@ import React from 'react';
 import { getFactoryContract, connectToWeb3 } from './components/source';
 import {useEffect} from 'react';
 import Loading from './components/loading';
+import { scroll } from './components/Navbar';
 
 export let usdbalupdate;
 export let tokenbalupdate;
@@ -52,16 +53,23 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
 updatetokendata=updateCurrentTrade;
   return (
+    
     <Router> 
       <Navbar/>
       <NavbarPhone/>
+      <div onClick={()=>{
+      scroll("none");
+      scrollP("none");
+      }}>
       <Alert/>
       <Loading/>
+      
       <Routes>
         <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
         <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>
         <Route  element={<CreateToken/>} path="/create"/>
       </Routes>
+      </div>
     </Router>
   );
 }

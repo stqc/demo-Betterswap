@@ -6,7 +6,7 @@ import {
 import { connectToWeb3,getPool,buildChart} from './source';
 import TokenList from './searchOption';
 export let updateFuncPhone;
-
+export let scrollP;
 function NavbarPhone() {
   const [TradeName,updateTrade] =React.useState('nav-options-selected-p');
     const [createName,updateCreate] =React.useState('nav-options-p');
@@ -15,6 +15,7 @@ function NavbarPhone() {
     const [scrollBar,updateScroll] = React.useState("none");
 
     updateFuncPhone=setConnected;
+    scrollP=updateScroll;
     let searchVal = React.createRef();
     
 
