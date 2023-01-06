@@ -134,7 +134,8 @@ export const getPool = async (tokenAddress)=>{
                 }  
                 console.log(poolInfo.trading);
                 await updatetokendata(poolInfo);
-                // visibleMakerL("none");
+                if(searched){
+                 visibleMakerL("none");}
 
         }
         catch (e){
@@ -157,12 +158,13 @@ export const getPool = async (tokenAddress)=>{
                 novote:0,
                 thresh:0
             }   
-        // visibleMakerL("none");
+            if(searched){
+                visibleMakerL("none");}
         contentChanger("The searched pool does not exist yet");
         visibleMaker("grid");
 
         }
-        // visibleMakerL("none");
+        visibleMakerL("none");
 
             await updatetokendata(poolInfo);    
         return poolInfo;
@@ -187,9 +189,12 @@ export const getPool = async (tokenAddress)=>{
             novote:null,
             thresh:null
         }
-        // visibleMakerL("none");
+        if(searched){
+            visibleMakerL("none");}
         contentChanger("The searched pool does not exist yet");
         visibleMaker("grid");
+        if(searched){
+            visibleMakerL("none");}
     }
         catch(e){
             console.log(e.message);
@@ -521,7 +526,9 @@ window.ethereum.on("accountsChanged",async (acc)=>{
   window.addEventListener("load",async ()=>{
     if(tokenAD){
         await getPool(tokenAD);
-        searched.current.value=tokenAD
-        tradeSearch.current.value=tokenAD
+        if(searched){
+        searched.current.value=tokenAD}
+        if(tradeSearch){
+        tradeSearch.current.value=tokenAD}
     }
   })

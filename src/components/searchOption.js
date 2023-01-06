@@ -19,7 +19,7 @@ export default function TokenList (props){
                     <div className="token-Name">
                             {data[element]}
                     </div>
-                    <div className="token-address">
+                    <div className="token-address" style={{color:"#747D88"}}>
                         {element.slice(0,20)+"..."}
                     </div>
                     </div>)
