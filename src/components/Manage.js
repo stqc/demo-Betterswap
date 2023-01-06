@@ -47,7 +47,7 @@ searched=searchVal;
           <br />
           These methods can be updated after the creation of the pool
           <br/> <h5>For creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created you may add the liquidity as required</h5>
-          <h4 style={{color:"rgb(16,255,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax= Development Tax on Buys + AutoLP Tax Eg. (5+2=7% Total Buy Tax)
+          <h4 style={{color:"rgb(16,255,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax= Development Tax on Buys + AutoLP Tax Eg: (5+2=7% Total Buy Tax)
           <br/>Total Sell Tax= Development Tax on Sells + AutoLP Tax Eg:(15+10=25% Total Sell Tax)</h4>
         </span>
         <div className="amount" style={{ margin: '2%' }}>

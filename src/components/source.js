@@ -442,7 +442,7 @@ window.addEventListener("load",()=>{
 })
 
 export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
-    if(buyTax+lptax>30 || sellTax+lptax>30){
+    if(Number(buyTax)+Number(lptax)>30 || Number(sellTax)+Number(lptax)>30){
         alert("Token tax is greater than 30%");
     }else{
     if(!ref){
