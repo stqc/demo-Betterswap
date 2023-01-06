@@ -3,14 +3,18 @@ import './css/nav.css';
 import {
   Link
 } from "react-router-dom";
-import { connectToWeb3,getPool,buildChart} from './source';
+import { connectToWeb3} from './source';
 export let updateFuncPhone;
+export var tradeselecp,createselectp,manageselectp;
+
 function NavbarPhone() {
   const [TradeName,updateTrade] =React.useState('nav-options-selected-p');
     const [createName,updateCreate] =React.useState('nav-options-p');
     const [manageName,updateManage] =React.useState('nav-options-p');
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
-
+    tradeselecp=updateTrade;
+    createselectp=updateCreate;
+    manageselectp=updateManage
     updateFuncPhone=setConnected;
     let searchVal = React.createRef();
     

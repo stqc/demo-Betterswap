@@ -1,5 +1,7 @@
 import React from "react";
 import {approveTX,createToken,USDAddress} from './source';
+import { tradeselec,manageselect,createselect } from './Navbar';
+import { createselectp,manageselectp,tradeselecp } from './Navphone';
 
 export var tkchange;
 
@@ -11,7 +13,16 @@ function CreateToken(){
     const [apprtxt,changeapprtxt]=React.useState("Approve Token Creation Fee");
     const [show,updateShow] =React.useState("none");
     const [tkad,setTkad]=React.useState("0");
+    const [isVis,changeVis]=React.useState(false);
     tkchange=setTkad;
+    React.useEffect(()=>{
+      tradeselec("nav-options")
+    manageselect("nav-options")
+    createselect("nav-options-selected")
+    tradeselecp("nav-options-p")
+    manageselectp("nav-options-p")
+    createselectp("nav-options-selected-p")
+    },[])
     return (
         <div className="trade-content">
       <div className="chart-content">
@@ -25,16 +36,18 @@ function CreateToken(){
         <div className="amount" style={{ margin: '2%' }}>
           <input ref={tksup}style={{ width: '100%', fontSize: 'large' }} placeholder="Enter Token Supply" type="number" min="0"></input>
         </div>
-            <button style={{margin: "3%" }} onClick={async ()=>{
+            {!isVis && <button style={{margin: "3%" }} onClick={async ()=>{
                 await approveTX(USDAddress,"20","0xbf7f0d539C0eD9B39d846b5cd15f86032f2D31DA");
                 changeapprtxt("USD Fee Approved")
-            }}>{apprtxt}</button>
-            <button style={{margin: "0.5% 3% 2% 3%" }}
+                changeVis(true);
+            }}>{apprtxt}</button>}
+            {isVis && <button style={{margin: "0.5% 3% 2% 3%" }}
             onClick={async ()=>{
               await createToken(tkname.current.value,tkym.current.value,tksup.current.value)
               changeapprtxt("Approve Token Creation Fee")
               updateShow("initial")
-            }}> Create Token</button>
+              changeVis(false);
+            }}> Create Token</button>}
 
         </div>
         <div className="swap-content">

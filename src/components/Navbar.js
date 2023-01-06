@@ -7,6 +7,8 @@ import { connectToWeb3,getPool, buildChart } from './source';
 import logo from "./Xgczj6_2_.svg";
 export let updateFunc
 export var scroll;
+
+export var tradeselec,createselect,manageselect;
 function Navbar() {
     
     const [currentDisplay,updateDisplay] = React.useState('none');
@@ -14,7 +16,9 @@ function Navbar() {
     const [createName,updateCreate] =React.useState('nav-options');
     const [manageName,updateManage] =React.useState('nav-options');
     const [currentConnected,setConnected] =React.useState('Connect Wallet');
-
+      tradeselec=updateTrade;
+      createselect=updateCreate;
+      manageselect=updateManage
     updateFunc=setConnected;
   return (
     <nav>

@@ -5,6 +5,8 @@ import './css/chart.css';
 import './css/nav.css';
 import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance,getPool} from "./source"
 import TokenList from './searchOption';
+import { tradeselec,manageselect,createselect } from './Navbar';
+import { createselectp,manageselectp,tradeselecp } from './Navphone';
 export var scroll;
 export var tradeSearch;
 function TradeContent(props) {
@@ -19,11 +21,16 @@ function TradeContent(props) {
   tradeSearch =searchVal;
   scroll=updateScroll;
   React.useEffect(()=>{
-    // var f=async ()=>{
-    // if(tokenAD){
-    //  await  buildChart();
-    // }}
-    // f();
+    tradeselec("nav-options-selected")
+    manageselect("nav-options")
+    createselect("nav-options")
+    tradeselecp("nav-options-selected-p")
+    manageselectp("nav-options-p")
+    createselectp("nav-options-p")
+
+    if(tokenAD){
+      buildChart();
+    }
   },[])
   return (
     <div className="trade-content">

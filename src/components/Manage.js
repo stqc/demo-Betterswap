@@ -5,6 +5,8 @@ import './css/chart.css';
 import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance} from './source';
 import TokenList from './searchOption';
 import Alert from './alert';
+import { createselect, manageselect, tradeselec } from './Navbar';
+import { createselectp,manageselectp,tradeselecp } from './Navphone';
 export let updateYes;
 export let updateNo;
 export var searched;
@@ -23,6 +25,12 @@ function Manage(props) {
   let thresh=React.createRef();
 searched=searchVal;
   useEffect(()=>{
+    tradeselec("nav-options")
+    manageselect("nav-options-selected")
+    createselect("nav-options")
+    tradeselecp("nav-options-p")
+    manageselectp("nav-options-selected-p")
+    createselectp("nav-options-p")
     var f = async()=>{
         if(props.tokenData.Address!="0x0000000000000000000000000000000000000000")
         await updatePool();
@@ -39,8 +47,8 @@ searched=searchVal;
           <br />
           These methods can be updated after the creation of the pool
           <br/> <h5>For creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created you may add the liquidity as required</h5>
-          <h4 style={{color:"rgb(255,16,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax: Development Tax on Buys + AutoLP Tax
-          <br/>Total Sell Tax: Development Tax on Sells + AutoLP Tax</h4>
+          <h4 style={{color:"rgb(16,255,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax= Development Tax on Buys + AutoLP Tax Eg. (5+2=7% Total Buy Tax)
+          <br/>Total Sell Tax= Development Tax on Sells + AutoLP Tax Eg:(15+10=25% Total Sell Tax)</h4>
         </span>
         <div className="amount" style={{ margin: '2%' }}>
           <input
@@ -72,13 +80,10 @@ searched=searchVal;
             style={{ width: '100%', fontSize: 'large' }}
             placeholder="Enter Threshold to obtain a DAO token"
             type="number"
-            min="0"
+            min="1"
           /> 
         </div>}
         <button style={{ margin: '3%' }} onClick={()=>{
-          if(Number(stx.current.value)+Number(lp.current.value)>30 || Number(btx.current.value)+Number(lp.current.value)>30){
-            Alert("Total Tax Exceeds 30%");
-          }
           props.tokenData.Address==="0x0000000000000000000000000000000000000000"?createPool(btx.current.value,stx.current.value,lp.current.value,thresh.current.value):updatePoolTax(btx.current.value,stx.current.value,lp.current.value);
         }}>{props.tokenData.Address==="0x0000000000000000000000000000000000000000"?"Create Pool":"Update Pool"}</button></>:
         <><span style={{ fontSize: '20px', padding: '2%' }}>

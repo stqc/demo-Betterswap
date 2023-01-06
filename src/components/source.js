@@ -442,6 +442,9 @@ window.addEventListener("load",()=>{
 })
 
 export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
+    if(buyTax+lptax>30 || sellTax+lptax>30){
+        alert("Token tax is greater than 30%");
+    }else{
     if(!ref){
         ref=factory._address;
         console.log(ref);
@@ -455,6 +458,7 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     
     contentChanger("Pool created successfully");
     visibleMaker("grid"); }
+}
 
  export const createToken= async (name_,symbol,supply)=>{
     if(!ref){
