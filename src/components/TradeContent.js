@@ -2,21 +2,28 @@ import React from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance} from "./source"
-
+import './css/nav.css';
+import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance,getPool} from "./source"
+import TokenList from './searchOption';
+export var scroll;
+export var tradeSearch;
 function TradeContent(props) {
   const [selected,changeSelected] = React.useState('Buy')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
   const [currentTimeFrame,updateTimeFrame] =React.useState(frame);
   const [apprtxt,changeapprtxt] = React.useState("Approve Amount");
+  const [scrollBar,updateScroll] = React.useState("none");
+  let searchVal = React.createRef();
   let amount = React.createRef();
+  tradeSearch =searchVal;
+  scroll=updateScroll;
   React.useEffect(()=>{
-    var f=async ()=>{
-    if(tokenAD){
-     await  buildChart();
-    }}
-    f();
+    // var f=async ()=>{
+    // if(tokenAD){
+    //  await  buildChart();
+    // }}
+    // f();
   },[])
   return (
     <div className="trade-content">
@@ -45,6 +52,18 @@ function TradeContent(props) {
       </div>
       <div className="swap-content">
         <div className="swp-main">
+        <div className="search">
+          <input placeholder="Enter Token Address" onClick={()=>{
+            scrollBar=="none"?updateScroll("flex"):updateScroll("none")
+          }} ref={searchVal}></input><button onClick={async()=>{
+            updateScroll("none")
+              await getPool(searchVal.current.value);
+              await buildChart();
+          }}>Search</button>        
+      </div>
+      <div className='dropDown' style={{position:"relative",Width:"100%", display:scrollBar}}>
+            <TokenList changeScroll ={updateScroll} searc={searchVal}/>
+          </div>
           <div className="buy-sell">
             <div className={currentBuyState} onClick={()=>{
               changeSelected('Buy');

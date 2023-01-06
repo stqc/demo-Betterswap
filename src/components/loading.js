@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/Alert.css";
+import "./css/Loading.css";
 import loadingLogo from "./787.gif";
 
 export let visibleMakerL;
@@ -8,8 +8,8 @@ const Loading=()=>{
 
     visibleMakerL=updateVisibility;
     return(
-    <div className="alert-seq" style={{display:visibility}}>
-        <div className="alert-content">
+    <div className="Load-seq" style={{display:visibility}}>
+        <div className="Load-content">
             <span><img src={loadingLogo}/></span>
         <span>Loading..</span>
         </div>

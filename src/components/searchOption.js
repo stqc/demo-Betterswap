@@ -20,7 +20,7 @@ export default function TokenList (props){
                             {data[element]}
                     </div>
                     <div className="token-address">
-                        {element.slice(0,28)+"..."}
+                        {element.slice(0,20)+"..."}
                     </div>
                     </div>)
                 })

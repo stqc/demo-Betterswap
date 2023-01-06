@@ -1,12 +1,17 @@
 import React from "react";
 import {approveTX,createToken,USDAddress} from './source';
 
+export var tkchange;
+
 function CreateToken(){
 
     let tkname = React.createRef();
     let tkym = React.createRef();
     let tksup =React.createRef();
     const [apprtxt,changeapprtxt]=React.useState("Approve Token Creation Fee");
+    const [show,updateShow] =React.useState("none");
+    const [tkad,setTkad]=React.useState("0");
+    tkchange=setTkad;
     return (
         <div className="trade-content">
       <div className="chart-content">
@@ -21,13 +26,14 @@ function CreateToken(){
           <input ref={tksup}style={{ width: '100%', fontSize: 'large' }} placeholder="Enter Token Supply" type="number" min="0"></input>
         </div>
             <button style={{margin: "3%" }} onClick={async ()=>{
-                await approveTX(USDAddress,"20","0x57dd8B37d85188a8127b8cd8aF631d173Db3f9bE");
+                await approveTX(USDAddress,"20","0xbf7f0d539C0eD9B39d846b5cd15f86032f2D31DA");
                 changeapprtxt("USD Fee Approved")
             }}>{apprtxt}</button>
             <button style={{margin: "0.5% 3% 2% 3%" }}
             onClick={async ()=>{
               await createToken(tkname.current.value,tkym.current.value,tksup.current.value)
               changeapprtxt("Approve Token Creation Fee")
+              updateShow("initial")
             }}> Create Token</button>
 
         </div>
@@ -42,7 +48,10 @@ function CreateToken(){
                         <li>Approve USD for a small fee of $20 and then create your token!</li>
                         <li>Once the token is created head on over to Manage Token tab. This is where you will set your Taxes and create your pool to trade on BetterSwap!</li>
                     </ul>
-                </div>                
+                </div>    
+                <button style={{display:show}} onClick={()=>{
+                  window.location.href="/manage?token="+tkad
+                }}>Go to Manage Token</button>            
             </div>
         </div>
     </div>

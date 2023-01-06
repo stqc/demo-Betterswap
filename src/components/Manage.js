@@ -2,24 +2,26 @@ import React, { useEffect } from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, updatePool,getMaxBalance} from './source';
-
+import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance} from './source';
+import TokenList from './searchOption';
+import Alert from './alert';
 export let updateYes;
 export let updateNo;
-
+export var searched;
 function Manage(props) {
   const [selected,changeSelected] = React.useState('Add Liquidity')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
+  const [scrollBar,updateScroll] = React.useState("none");
 
-
+  let searchVal = React.createRef();
   let usdAMT = React.createRef();
   let tokenAMT= React.createRef();
   let btx=React.createRef();
   let stx=React.createRef();
   let lp=React.createRef();
   let thresh=React.createRef();
-
+searched=searchVal;
   useEffect(()=>{
     var f = async()=>{
         if(props.tokenData.Address!="0x0000000000000000000000000000000000000000")
@@ -37,12 +39,13 @@ function Manage(props) {
           <br />
           These methods can be updated after the creation of the pool
           <br/> <h5>For creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created you may add the liquidity as required</h5>
-          <h4 style={{color:"rgb(255,16,27)"}}>NOTE: The total tax cannot exceed more than 30%</h4>
+          <h4 style={{color:"rgb(255,16,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax: Development Tax on Buys + AutoLP Tax
+          <br/>Total Sell Tax: Development Tax on Sells + AutoLP Tax</h4>
         </span>
         <div className="amount" style={{ margin: '2%' }}>
           <input
             style={{ width: '100%', fontSize: 'large' }}
-            placeholder="Enter Buy Tax (type 0 for none)"
+            placeholder="Enter Development Tax On Buys (type 0 for none)"
             type="number"
             min="0" ref={btx}
           />
@@ -50,7 +53,7 @@ function Manage(props) {
         <div className="amount" style={{ margin: '2%' }}>
           <input
             style={{ width: '100%', fontSize: 'large' }}
-            placeholder="Enter Sell Tax (type 0 for none)"
+            placeholder="Enter Development Tax On Sells (type 0 for none)"
             type="number"
             min="0" ref={stx}
           />
@@ -73,6 +76,9 @@ function Manage(props) {
           /> 
         </div>}
         <button style={{ margin: '3%' }} onClick={()=>{
+          if(Number(stx.current.value)+Number(lp.current.value)>30 || Number(btx.current.value)+Number(lp.current.value)>30){
+            Alert("Total Tax Exceeds 30%");
+          }
           props.tokenData.Address==="0x0000000000000000000000000000000000000000"?createPool(btx.current.value,stx.current.value,lp.current.value,thresh.current.value):updatePoolTax(btx.current.value,stx.current.value,lp.current.value);
         }}>{props.tokenData.Address==="0x0000000000000000000000000000000000000000"?"Create Pool":"Update Pool"}</button></>:
         <><span style={{ fontSize: '20px', padding: '2%' }}>
@@ -94,6 +100,17 @@ function Manage(props) {
       </div>
       <div className="swap-content">
         <div className="swp-main">
+        <div className="search">
+          <input placeholder="Enter Token Address" onClick={()=>{
+            scrollBar=="none"?updateScroll("flex"):updateScroll("none")
+          }} ref={searchVal}></input><button onClick={async()=>{
+            updateScroll("none")
+              await getPool(searchVal.current.value);
+          }}>Search</button>        
+      </div>
+        <div className='dropDown' style={{position:"relative",Width:"100%", display:scrollBar}}>
+            <TokenList changeScroll ={updateScroll} searc={searchVal}/>
+          </div>
           <div className="buy-sell">
             <div className={currentBuyState} onClick={()=>{
               changeSelected('Add Liquidity');

@@ -8,14 +8,15 @@ const Alert=()=>{
     const [visibility,updateVisibility] = React.useState("none")
     contentChanger=updateContent;
     visibleMaker=updateVisibility;
+    React.useEffect(()=>{
+        setTimeout(()=>{
+            updateVisibility("none")
+        },5000)
+    },)
     return(
     <div className="alert-seq" style={{display:visibility}}>
         <div className="alert-content">
-            <span>Better Notification!</span>
-        <span>{NotificationContent}</span>
-        <button onClick={()=>{
-            updateVisibility("none");
-        }}>Close</button>
+                    <span>{NotificationContent}</span>
         </div>
     </div>)
 }

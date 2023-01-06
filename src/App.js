@@ -15,7 +15,7 @@ import React from 'react';
 import { getFactoryContract, connectToWeb3 } from './components/source';
 import {useEffect} from 'react';
 import Loading from './components/loading';
-import { scroll } from './components/Navbar';
+import { scroll } from './components/TradeContent';
 
 export let usdbalupdate;
 export let tokenbalupdate;
@@ -57,10 +57,7 @@ updatetokendata=updateCurrentTrade;
     <Router> 
       <Navbar/>
       <NavbarPhone/>
-      <div onClick={()=>{
-      scroll("none");
-      scrollP("none");
-      }}>
+      
       <Alert/>
       <Loading/>
       
@@ -69,7 +66,6 @@ updatetokendata=updateCurrentTrade;
         <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>
         <Route  element={<CreateToken/>} path="/create"/>
       </Routes>
-      </div>
     </Router>
   );
 }

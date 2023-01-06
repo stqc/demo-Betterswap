@@ -8,17 +8,22 @@ import {updateFuncPhone} from "./Navphone";
 import {usdbalupdate,tokenbalupdate,updatetokendata} from "../App";
 import { contentChanger, visibleMaker } from "./alert.js";
 import { visibleMakerL } from "./loading.js";
+import { tkchange } from "./create.js";
+import { searched } from "./Manage.js";
+import { tradeSearch } from "./TradeContent.js";
 
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 let web3;
 let factory;
 export let USDAddress;
 let dollar;
 let connectedAccount;
-export let tokenAD=null;
+export let tokenAD=urlParams.get('token');
 let tokenSearched=null;
 let chart;
 let lineSeries;
-export let frame='D';
+export let frame='H';
 var poolInfo={Address:"0x0000000000000000000000000000000000000000",
     token2usd: null,
     usd2token: null,
@@ -37,8 +42,7 @@ var poolInfo={Address:"0x0000000000000000000000000000000000000000",
 var pool;
 let chartData
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
+
 let ref= urlParams.get('ref');
 
 export const getFactoryContract = async ()=>{
@@ -130,7 +134,7 @@ export const getPool = async (tokenAddress)=>{
                 }  
                 console.log(poolInfo.trading);
                 await updatetokendata(poolInfo);
-                visibleMakerL("none");
+                // visibleMakerL("none");
 
         }
         catch (e){
@@ -153,12 +157,12 @@ export const getPool = async (tokenAddress)=>{
                 novote:0,
                 thresh:0
             }   
-        visibleMakerL("none");
+        // visibleMakerL("none");
         contentChanger("The searched pool does not exist yet");
         visibleMaker("grid");
 
         }
-        visibleMakerL("none");
+        // visibleMakerL("none");
 
             await updatetokendata(poolInfo);    
         return poolInfo;
@@ -183,7 +187,7 @@ export const getPool = async (tokenAddress)=>{
             novote:null,
             thresh:null
         }
-        visibleMakerL("none");
+        // visibleMakerL("none");
         contentChanger("The searched pool does not exist yet");
         visibleMaker("grid");
     }
@@ -191,7 +195,7 @@ export const getPool = async (tokenAddress)=>{
             console.log(e.message);
         }
     }
-    visibleMakerL("none");
+    // visibleMakerL("none");
     await updatePool(); 
 }
 
@@ -216,7 +220,7 @@ export const getPool = async (tokenAddress)=>{
             thresh: await pool.methods.DAOThreshold().call()/1e18
         }
        await upChart();
- 
+        visibleMakerL("none");
     
     await updatetokendata(poolInfo);
     await updateBalances();
@@ -450,17 +454,12 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     if(!ref){
         ref=factory._address;
         console.log(ref);
-    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0x57dd8B37d85188a8127b8cd8aF631d173Db3f9bE");
-    try{
-
+    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0xbf7f0d539C0eD9B39d846b5cd15f86032f2D31DA");
             var tx = await tokenFactory_.methods.createSimpleToken(name_,symbol,supply).send({from:connectedAccount[0]});
+            var add = await tokenFactory_.methods.lastTkCreated(connectedAccount[0]).call();
+            tkchange(add);
             contentChanger("Token created successfully");
             visibleMaker("grid");        
-    }
-    catch(e){
-        return [e.message,0];
-    }
-
 
 }
 
@@ -519,3 +518,10 @@ window.ethereum.on("accountsChanged",async (acc)=>{
 
   })
   
+  window.addEventListener("load",async ()=>{
+    if(tokenAD){
+        await getPool(tokenAD);
+        searched.current.value=tokenAD
+        tradeSearch.current.value=tokenAD
+    }
+  })
