@@ -133,6 +133,7 @@ export const getPool = async (tokenAddress)=>{
                     thresh:await pool.methods.DAOThreshold().call()/1e18
                 }  
                 console.log(poolInfo.trading);
+                await upChart();
                 await updatetokendata(poolInfo);
                 if(searched){
                  visibleMakerL("none");}
