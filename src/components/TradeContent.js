@@ -16,6 +16,7 @@ function TradeContent(props) {
   const [currentTimeFrame,updateTimeFrame] =React.useState(frame);
   const [apprtxt,changeapprtxt] = React.useState("Approve Amount");
   const [scrollBar,updateScroll] = React.useState("none");
+  const [estimateRec,updateEst] = React.useState(0);
   let searchVal = React.createRef();
   let amount = React.createRef();
   tradeSearch =searchVal;
@@ -28,6 +29,30 @@ function TradeContent(props) {
     manageselectp("nav-options-p")
     createselectp("nav-options-p")
   },[])
+
+  const calculateToken = ()=>{
+    var inPoolUSD = Number(props.tokenData.usdinpool.replace(",",""))
+    var inPoolToken = Number(props.tokenData.tokeninpool.replace(",",""))
+    var currentVal= Number(amount.current.value);
+    currentVal=currentVal-((currentVal/100)*Number(props.tokenData.buytax))
+    var tokensBeforePriceImpact = currentVal*Number(props.tokenData.token2usd);
+    inPoolUSD+=currentVal;
+    inPoolToken=inPoolToken-tokensBeforePriceImpact;
+    var newPrice = inPoolToken/inPoolUSD
+    updateEst((newPrice*currentVal).toLocaleString());
+  }
+  const calculateUSD = ()=>{
+    var inPoolUSD = Number(props.tokenData.usdinpool.replace(",",""))
+    var inPoolToken = Number(props.tokenData.tokeninpool.replace(",",""))
+    var currentVal= Number(amount.current.value);
+    currentVal=currentVal-((currentVal/100)*Number(props.tokenData.saletax))
+    var tokensBeforePriceImpact = currentVal*Number(props.tokenData.usd2token);
+    inPoolUSD-=currentVal;
+    inPoolToken=inPoolToken+tokensBeforePriceImpact;
+    var newPrice = inPoolUSD/inPoolToken;
+    updateEst((newPrice*currentVal).toLocaleString());
+  }
+
   return (
     <div className="trade-content">
       <div className="chart-content">
@@ -123,12 +148,19 @@ function TradeContent(props) {
           </div>
           {props.tokenData.trading && <>
             <div className="amount">
-              <input style={{ width: '100%', fontSize: 'large' }} ref={amount} placeholder="Enter Amount" type="number" min="0"></input>
+              <input style={{ width: '100%', fontSize: 'large' }} onChange={()=>{
+                selected==="Buy"?calculateToken():calculateUSD();
+              }} ref={amount} placeholder="Enter Amount" type="number" min="0"></input>
               <><p style={{display:"flex",justifyContent:"space-between", alignItems:"center",    margin: "0px 5px 0.5px 5px"}} id="bal">Balance: {selected==="Buy"?props.currentUSDBal:props.currentTokenBal} <p style={{cursor:"pointer"}} onClick={async()=>{
                 selected=="Buy"?amount.current.value =await getMaxBalance(USDAddress):amount.current.value =await getMaxBalance(tokenAD);
               }}>MAX</p></p>
               </>
             </div>
+            {props.tokenData.usdinpool &&
+            <div className='est'>
+              <div>Estimated Tokens Received:</div>
+              <div>{estimateRec}</div>
+            </div>}
             {props.tokenData.trading?<><button onClick={ async()=>{
               selected==="Buy"? await approveTX(USDAddress,amount.current.value,props.tokenData.Address):await approveTX(tokenAD,amount.current.value,props.tokenData.Address)
               changeapprtxt("Amount Approved");
