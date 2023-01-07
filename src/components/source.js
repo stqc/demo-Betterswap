@@ -116,7 +116,7 @@ export const getPool = async (tokenAddress)=>{
         var sup = await bep20.methods.totalSupply().call()/1e18
                 try{
                     console.log("try")
-                    poolInfo ={
+                    await(poolInfo ={
                     Address:pool._address,
                     token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
                     usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
@@ -131,7 +131,7 @@ export const getPool = async (tokenAddress)=>{
                     yesvote:await pool.methods.yesVotes().call(),
                     novote:await pool.methods.noVotes().call(),
                     thresh:await pool.methods.DAOThreshold().call()/1e18
-                }  
+                }  )
                 console.log(poolInfo.trading);
                 await upChart();
                 await updatetokendata(poolInfo);
@@ -143,26 +143,24 @@ export const getPool = async (tokenAddress)=>{
             console.log("catching")
             var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
             var sup = await bep20.methods.totalSupply().call()/1e18
-            poolInfo ={
+            await(poolInfo ={
                 Address:pool._address,
-                token2usd: 0,
-                usd2token: 0,
-                buytax: 0,
-                saletax: 0,
+                token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
+                usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
+                buytax: await pool.methods.totalBuyTax().call(),
+                saletax: await pool.methods.totalSaleTax().call(),
                 name: await bep20.methods.name().call(),
                 supply: sup.toLocaleString(),
-                ben: null,
-                usdinpool: 0,
-                tokeninpool: 0,
-                trading: true,
-                yesvote:0,
-                novote:0,
-                thresh:0
-            }   
+                ben: await pool.methods.beneficiery().call(),
+                usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+                tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+                trading: await pool.methods.tradingEnabled().call(),
+                yesvote:await pool.methods.yesVotes().call(),
+                novote:await pool.methods.noVotes().call(),
+                thresh:await pool.methods.DAOThreshold().call()/1e18
+            }  )
             if(searched){
                 visibleMakerL("none");}
-        contentChanger("The searched pool does not exist yet");
-        visibleMaker("grid");
 
         }
         visibleMakerL("none");

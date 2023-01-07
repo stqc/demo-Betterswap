@@ -27,10 +27,6 @@ function TradeContent(props) {
     tradeselecp("nav-options-selected-p")
     manageselectp("nav-options-p")
     createselectp("nav-options-p")
-
-    if(tokenAD){
-      buildChart();
-    }
   },[])
   return (
     <div className="trade-content">
