@@ -9,8 +9,8 @@ import {usdbalupdate,tokenbalupdate,updatetokendata} from "../App";
 import { contentChanger, visibleMaker } from "./alert.js";
 import { visibleMakerL } from "./loading.js";
 import { tkchange } from "./create.js";
-import { searched } from "./Manage.js";
-import { tradeSearch } from "./TradeContent.js";
+import {  searched } from "./Manage.js";
+import {  tradeSearch } from "./TradeContent.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -84,153 +84,342 @@ const updateBalances =async ()=>{
         usdbalupdate("$"+0)
     }
 }
-
-export const getPool = async (tokenAddress)=>{
-    visibleMakerL("grid");
-    tokenAD=tokenAddress
-    poolInfo={
-        Address:"0x0000000000000000000000000000000000000000",
-        token2usd: null,
-        usd2token: null,
-        buytax: null,
-        saletax: null,
-        name:null,
-        supply:null,
-        ben: null,
-        usdinpool:null,
-        tokeninpool:null,
-        trading:true,
-        yesvote:null,
-        novote:null,
-        thresh:null,
-    };
-    try{
-        pool=null;
-        var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
-        var poolAddress = await factory.methods.TokenToPool(tokenAddress).call();
-        pool = await new web3.eth.Contract(poolABI,poolAddress)        
-        tokenAD = tokenAddress;        
-        console.log(pool._address);
-        tokenSearched=bep20;
-        await updateBalances();
-        var sup = await bep20.methods.totalSupply().call()/1e18
-                try{
-                    console.log("try")
-                    await(poolInfo ={
-                    Address:pool._address,
-                    token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
-                    usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
-                    buytax: await pool.methods.totalBuyTax().call(),
-                    saletax: await pool.methods.totalSaleTax().call(),
-                    name: await bep20.methods.name().call(),
-                    supply: sup.toLocaleString(),
-                    ben: await pool.methods.beneficiery().call(),
-                    usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                    tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                    trading: await pool.methods.tradingEnabled().call(),
-                    yesvote:await pool.methods.yesVotes().call(),
-                    novote:await pool.methods.noVotes().call(),
-                    thresh:await pool.methods.DAOThreshold().call()/1e18
-                }  )
-                console.log(poolInfo.trading);
-                await upChart();
-                await updatetokendata(poolInfo);
-                if(searched){
-                 visibleMakerL("none");}
-
-        }
-        catch (e){
-            console.log("catching")
-            var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
-            var sup = await bep20.methods.totalSupply().call()/1e18
-            await(poolInfo ={
-                Address:pool._address,
-                token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
-                usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
-                buytax: await pool.methods.totalBuyTax().call(),
-                saletax: await pool.methods.totalSaleTax().call(),
-                name: await bep20.methods.name().call(),
-                supply: sup.toLocaleString(),
-                ben: await pool.methods.beneficiery().call(),
-                usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-                trading: await pool.methods.tradingEnabled().call(),
-                yesvote:await pool.methods.yesVotes().call(),
-                novote:await pool.methods.noVotes().call(),
-                thresh:await pool.methods.DAOThreshold().call()/1e18
-            }  )
-            if(searched){
-                visibleMakerL("none");}
-
-        }
-        visibleMakerL("none");
-
-            await updatetokendata(poolInfo);    
-        return poolInfo;
-    }
-    catch(e){
-        console.log(e.message);
-        try{
-            var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
-        poolInfo ={
+export const getPool=async(tokenAddress)=>
+{    poolInfo={
             Address:"0x0000000000000000000000000000000000000000",
-            token2usd: 0,
-            usd2token: 0,
-            buytax: 0,
-            saletax: 0,
-            name: await bep20.methods.name().call(),
-            supply: sup.toLocaleString(),
+            token2usd: null,
+            usd2token: null,
+            buytax: null,
+            saletax: null,
+            name:null,
+            supply:null,
             ben: null,
-            usdinpool: 0,
-            tokeninpool:0,
-            trading: true,
+            usdinpool:null,
+            tokeninpool:null,
+            trading:true,
             yesvote:null,
             novote:null,
-            thresh:null
-        }
-        if(searched){
-            visibleMakerL("none");}
-        contentChanger("The searched pool does not exist yet");
-        visibleMaker("grid");
-        if(searched){
-            visibleMakerL("none");}
-    }
-        catch(e){
-            console.log(e.message);
-        }
-    }
-    // visibleMakerL("none");
-    await updatePool(); 
+            thresh:null,
+        };
+        
+    console.log(tokenAddress);
+    tokenAD=tokenAddress;
+    var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
+    tokenSearched=bep20;
+    var poolAddress = await factory.methods.showPoolAddress(tokenAddress).call();
+    console.log(poolAddress);
+
+    visibleMakerL("grid");
+    if(poolAddress!="0x0000000000000000000000000000000000000000"){
+            try{
+                
+                pool = await new web3.eth.Contract(poolABI,poolAddress);
+                tokenSearched=bep20;
+                await updateBalances();
+                poolInfo.Address=poolAddress;
+                poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString();
+                poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString();                
+                poolInfo.buytax= await pool.methods.totalBuyTax().call();
+                poolInfo.saletax= await pool.methods.totalSaleTax().call();
+                poolInfo.name= await tokenSearched.methods.name().call();
+                poolInfo.supply= (await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString();
+                poolInfo.ben= await pool.methods.beneficiery().call();
+                poolInfo.usdinpool=(await dollar.methods.balanceOf(poolAddress).call()/1e18).toLocaleString();
+                poolInfo.tokeninpool=(await tokenSearched.methods.balanceOf(poolAddress).call()/1e18).toLocaleString();
+                poolInfo.trading= await pool.methods.tradingEnabled().call();
+                poolInfo.yesvote=await pool.methods.yesVotes().call();
+                poolInfo.novote=await pool.methods.noVotes().call();
+                poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
+                
+                await updatetokendata(poolInfo);
+                await buildChart()
+                 
+                visibleMakerL("none");
+                await upChart();
+            }
+            catch(e){
+                poolInfo.Address=poolAddress;
+                poolInfo.token2usd= 0;
+                poolInfo.usd2token= 0;                
+                poolInfo.buytax= await pool.methods.totalBuyTax().call();
+                poolInfo.saletax= await pool.methods.totalSaleTax().call();
+                poolInfo.name= await tokenSearched.methods.name().call();
+                poolInfo.supply= (await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString();
+                poolInfo.ben= await pool.methods.beneficiery().call();
+                poolInfo.usdinpool=(await dollar.methods.balanceOf(poolAddress).call()/1e18).toLocaleString();
+                poolInfo.tokeninpool=(await tokenSearched.methods.balanceOf(poolAddress).call()/1e18).toLocaleString();
+                poolInfo.trading= await pool.methods.tradingEnabled().call();
+                poolInfo.yesvote=await pool.methods.yesVotes().call();
+                poolInfo.novote=await pool.methods.noVotes().call();
+                poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
+                
+                await updatetokendata(poolInfo);
+                await buildChart()
+                 
+                visibleMakerL("none");
+                await upChart();
+            }
+            }else{
+                console.log("no pool")
+                poolInfo={Address:"0x0000000000000000000000000000000000000000",
+                token2usd: null,
+                usd2token: null,
+                buytax: null,
+                saletax: null,
+                name:await tokenSearched.methods.name().call(),
+                supply:(await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString(),
+                ben: null,
+                usdinpool:null,
+                tokeninpool:null,
+                trading:true,
+                yesvote:null,
+                novote:null,
+                thresh:null,
+                    };
+                await updatetokendata(poolInfo);
+                 
+                visibleMakerL("none");
+                await upChart();
+            }
+    await updatetokendata(poolInfo);
+     
+     
+    visibleMakerL("none");
+    await upChart();
+    
+
+
 }
+// export const getPool = async (tokenAddress)=>{
+//     visibleMakerL("grid");
+//     tokenAD=tokenAddress
+//     poolInfo={
+//         Address:"0x0000000000000000000000000000000000000000",
+//         token2usd: null,
+//         usd2token: null,
+//         buytax: null,
+//         saletax: null,
+//         name:null,
+//         supply:null,
+//         ben: null,
+//         usdinpool:null,
+//         tokeninpool:null,
+//         trading:true,
+//         yesvote:null,
+//         novote:null,
+//         thresh:null,
+//     };
+//     try{
+//         pool=null;
+//         var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
+//         var poolAddress = await factory.methods.TokenToPool(tokenAddress).call();
+//         pool = await new web3.eth.Contract(poolABI,poolAddress)        
+//         tokenAD = tokenAddress;        
+//         console.log(await pool.methods.DAOThreshold().call());
+//         tokenSearched=bep20;
+//         await updateBalances();
+//         var sup = await bep20.methods.totalSupply().call()/1e18
+//         await console.log(sup);
+//                 try{
+//                     console.log("try")
+//                     await(poolInfo ={
+//                     Address:pool._address,
+//                     token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
+//                     usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
+//                     buytax: await pool.methods.totalBuyTax().call(),
+//                     saletax: await pool.methods.totalSaleTax().call(),
+//                     name: await bep20.methods.name().call(),
+//                     supply: sup.toLocaleString(),
+//                     ben: await pool.methods.beneficiery().call(),
+//                     usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+//                     tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+//                     trading: await pool.methods.tradingEnabled().call(),
+//                     yesvote:await pool.methods.yesVotes().call(),
+//                     novote:await pool.methods.noVotes().call(),
+//                     thresh:await pool.methods.DAOThreshold().call()/1e18
+//                 }  )
+//                 console.log(poolInfo.trading);
+//                 await upChart();
+//                 await updatetokendata(poolInfo);
+//                 if(searched){
+//                  visibleMakerL("none");}
+//                  if(tradeSearch){
+//                     tradeSearch.current.value=tokenAD;
+//                  }
+
+//         }
+//         catch (e){
+//             console.log(e);
+//             console.log("catching")
+//             var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
+//             var sup = await bep20.methods.totalSupply().call()/1e18
+//             await(poolInfo ={
+//                 Address:pool._address,
+//                 token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
+//                 usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
+//                 buytax: await pool.methods.totalBuyTax().call(),
+//                 saletax: await pool.methods.totalSaleTax().call(),
+//                 name: await bep20.methods.name().call(),
+//                 supply: sup.toLocaleString(),
+//                 ben: await pool.methods.beneficiery().call(),
+//                 usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+//                 tokeninpool: (await bep20.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
+//                 trading: await pool.methods.tradingEnabled().call(),
+//                 yesvote:await pool.methods.yesVotes().call(),
+//                 novote:await pool.methods.noVotes().call(),
+//                 thresh:await pool.methods.DAOThreshold().call()/1e18
+//             }  )
+//             await upChart();
+//             await updatetokendata(poolInfo);
+
+//             if(searched){
+//                 searched.current.value=tokenAD;
+//                 visibleMakerL("none");
+//             }
+//             if(tradeSearch){
+//                     tradeSearch.current.value=tokenAD;
+//                  }
+
+//         }
+//         visibleMakerL("none");
+
+//             await updatetokendata(poolInfo);    
+//     }
+//     catch(e){
+//         console.log(e);
+//         try{
+//             var bep20 = await new web3.eth.Contract(bep20ABI,tokenAddress);
+//             console.log("frommain handle",bep20._address);
+//         poolInfo ={
+//             Address:"0x0000000000000000000000000000000000000000",
+//             token2usd: 0,
+//             usd2token: 0,
+//             buytax: 0,
+//             saletax: 0,
+//             name: await bep20.methods.name().call(),
+//             supply: sup.toLocaleString(),
+//             ben: null,
+//             usdinpool: 0,
+//             tokeninpool:0,
+//             trading: true,
+//             yesvote:null,
+//             novote:null,
+//             thresh:null
+//         }
+//         console.log(poolInfo);
+//         await updatetokendata(poolInfo);
+//         if(searched){
+//             visibleMakerL("none");}
+//             contentChanger("The searched pool does not exist yet");
+//             visibleMaker("grid");
+//             searched.current.value=tokenAD;
+//         if(searched){
+//             visibleMakerL("none");
+//             searched.current.value=tokenAD;
+//         }
+//         if(tradeSearch){
+//                     tradeSearch.current.value=tokenAD;
+//                  }
+//     }
+//         catch(e){
+//             console.log(e.message);
+//         }
+//     }
+//     visibleMakerL("none");
+//     await updatePool(); 
+// }
 
  export const updatePool=async()=>{
-    var sup = await tokenSearched.methods.totalSupply().call()/1e18
-    
-        console.log(pool._address);
-        poolInfo ={
-            Address:pool._address,
-            token2usd: (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString(),
-            usd2token: (await pool.methods.USDPerToken().call()/1e18).toLocaleString(),
-            buytax: await pool.methods.totalBuyTax().call(),
-            saletax: await pool.methods.totalSaleTax().call(),
-            name: await tokenSearched.methods.name().call(),
-            supply: sup.toLocaleString(),
-            ben: await pool.methods.beneficiery().call(),
-            usdinpool: (await dollar.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-            tokeninpool: (await tokenSearched.methods.balanceOf(pool._address).call()/1e18).toLocaleString(),
-            trading: await pool.methods.tradingEnabled().call(),
-            yesvote:await pool.methods.yesVotes().call(),
-            novote:await pool.methods.noVotes().call(),
-            thresh: await pool.methods.DAOThreshold().call()/1e18
+         ;
+         
+        var sup = await tokenSearched.methods.totalSupply().call()/1e18
+        var poolAD= await factory.methods.showPoolAddress(tokenAD).call();
+        pool=await new web3.eth.Contract(poolABI,poolAD);
+        if(poolAD!="0x0000000000000000000000000000000000000000"){
+        try{
+            poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString();
+                poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString();                
+                poolInfo.buytax= await pool.methods.totalBuyTax().call();
+                poolInfo.saletax= await pool.methods.totalSaleTax().call();
+                poolInfo.name= await tokenSearched.methods.name().call();
+                poolInfo.supply= (await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString();
+                poolInfo.ben= await pool.methods.beneficiery().call();
+                poolInfo.usdinpool=(await dollar.methods.balanceOf(poolAD).call()/1e18).toLocaleString();
+                poolInfo.tokeninpool=(await tokenSearched.methods.balanceOf(poolAD).call()/1e18).toLocaleString();
+                poolInfo.trading= await pool.methods.tradingEnabled().call();
+                poolInfo.yesvote=await pool.methods.yesVotes().call();
+                poolInfo.novote=await pool.methods.noVotes().call();
+                poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
+            
+            await updatetokendata(poolInfo);
+             
+             
+            await updateBalances();
+            visibleMakerL("none");
+            if(tradeSearch){
+                tradeSearch.current.value=tokenAD;
+                await upChart();
+            }
+            visibleMakerL("none");
+            if(searched){
+                searched.current.value=tokenAD;
+            }
+            visibleMakerL("none");
+            await upChart();
         }
-       await upChart();
-        visibleMakerL("none");
-    
+        catch(e){
+            poolInfo.Address=poolAD;
+                poolInfo.token2usd= 0;
+                poolInfo.usd2token= 0;                
+                poolInfo.buytax= await pool.methods.totalBuyTax().call();
+                poolInfo.saletax= await pool.methods.totalSaleTax().call();
+                poolInfo.name= await tokenSearched.methods.name().call();
+                poolInfo.supply= (await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString();
+                poolInfo.ben= await pool.methods.beneficiery().call();
+                poolInfo.usdinpool=(await dollar.methods.balanceOf(poolAD).call()/1e18).toLocaleString();
+                poolInfo.tokeninpool=(await tokenSearched.methods.balanceOf(poolAD).call()/1e18).toLocaleString();
+                poolInfo.trading= await pool.methods.tradingEnabled().call();
+                poolInfo.yesvote=await pool.methods.yesVotes().call();
+                poolInfo.novote=await pool.methods.noVotes().call();
+                poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
+            await updatetokendata(poolInfo);
+             
+            await updateBalances();
+            visibleMakerL("none");
+           
+            visibleMakerL("none");
+            await upChart();
+        }
+        
+        
+    }else{
+                poolInfo={Address:"0x0000000000000000000000000000000000000000",
+                token2usd: null,
+                usd2token: null,
+                buytax: null,
+                saletax: null,
+                name:await tokenSearched.methods.name().call(),
+                supply:(await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString(),
+                ben: null,
+                usdinpool:null,
+                tokeninpool:null,
+                trading:true,
+                yesvote:null,
+                novote:null,
+                thresh:null,
+            };
+            await updatetokendata(poolInfo);
+             
+             
+            await updateBalances();
+            visibleMakerL("none");
+           
+            await upChart();
+    }
     await updatetokendata(poolInfo);
-    await updateBalances();
-    
-    
-    
+    await upChart();
+     
+     
 }
 
 export const getMaxBalance= async (TKaddress)=>{
@@ -269,7 +458,6 @@ export const sellToken =async (USD)=>{
 
 export const approveTX = async(tokenToApprove,amount,addressToApprove)=>{
     amount=web3.utils.toWei(amount);
-    console.log(tokenToApprove);
      try{
          var tokenContract = await new web3.eth.Contract(bep20ABI,tokenToApprove);
          var tx= await tokenContract.methods.approve(addressToApprove,amount).send({from:connectedAccount[0]});
@@ -334,8 +522,10 @@ const upChart = async ()=>{
     if(frame==="D"){
         data=await get1dChartData()
     }
+    if( !document.getElementById('chrt').innerHTML){
+        buildChart();
+    }
     chartData=data
-    console.log(data)
     await lineSeries.setData(data); 
 }
 
@@ -358,7 +548,6 @@ export const buildChart=async()=>{
         if(frame==="D"){
             data =await get1dChartData()
         }
-
     document.getElementById('chrt').innerHTML="";
     chart = createChart(document.getElementById("chrt"), { width: document.getElementById("chrt").offsetWidth, height:  document.getElementById("chrt").offsetHeight,
         layout: {
@@ -449,8 +638,12 @@ export const createPool=async (buyTax,sellTax,lptax,thresh)=>{
     }
     console.log(buyTax,sellTax,lptax);
     thresh=web3.utils.toWei(thresh);
+    try{
     var tx = await factory.methods.createNewPool(tokenAD,connectedAccount[0],buyTax,sellTax,lptax,thresh,ref).send({from:connectedAccount[0]});
-    await getPool(tokenAD);
+    await getPool(tokenAD);}
+    catch(e){
+        console.log(e);
+    }
     poolInfo.buytax=Number(buyTax)+Number(lptax);
     poolInfo.saletax=Number(sellTax)+Number(lptax);
     
@@ -527,8 +720,10 @@ window.ethereum.on("accountsChanged",async (acc)=>{
   })
   
   window.addEventListener("load",async ()=>{
+    await getFactoryContract();
+    console.log("TOken is",tokenAD)
     if(tokenAD){
-        await getPool(tokenAD);
+        getPool(tokenAD);
         if(searched){
         searched.current.value=tokenAD}
         if(tradeSearch){

@@ -10,12 +10,12 @@ import { createselectp,manageselectp,tradeselecp } from './Navphone';
 export let updateYes;
 export let updateNo;
 export var searched;
+
 function Manage(props) {
   const [selected,changeSelected] = React.useState('Add Liquidity')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
   const [currentSellState,changeSellState] = React.useState('sell');
   const [scrollBar,updateScroll] = React.useState("none");
-
   let searchVal = React.createRef();
   let usdAMT = React.createRef();
   let tokenAMT= React.createRef();
@@ -74,7 +74,7 @@ searched=searchVal;
             min="0"
           /> 
         </div>
-        {props.tokenData.usdinpool<=0 &&
+        {props.tokenData.Address!=="0x0000000000000000000000000000000000000000" || props.tokenData.Address!==null &&
         <div className="amount" style={{ margin: '2%' }}>
           <input ref={thresh}
             style={{ width: '100%', fontSize: 'large' }}

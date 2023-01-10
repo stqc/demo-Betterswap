@@ -299,7 +299,7 @@ const factoryABI =[
     "type": "function"
   }
 ]
-  const poolABI =  [
+  const poolABI =[
     {
       "inputs": [
         {
@@ -1023,25 +1023,6 @@ const factoryABI =[
       "name": "vote",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "voted",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     },
     {

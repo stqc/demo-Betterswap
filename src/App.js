@@ -20,16 +20,8 @@ import { scroll } from './components/TradeContent';
 export let usdbalupdate;
 export let tokenbalupdate;
 export let updatetokendata;
-
+export let tkd;
 function App() {
-
-  useEffect(()=>{
-    async function startUP(){
-     await getFactoryContract();
-     await connectToWeb3();
-    }
-    startUP();
-},[]);
 
 const [currentUSDBal,updateUSDBal] =React.useState('$0')
 const [currentTokenBal,updateTokenBal] =React.useState('0')
@@ -51,7 +43,15 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
     thresh:null,
   };
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
+tkd=currentTrade;
 updatetokendata=updateCurrentTrade;
+useEffect(()=>{
+  async function startUP(){
+   await getFactoryContract();
+   await connectToWeb3();
+  }
+  startUP();
+},[currentTrade]);
   return (
     
     <Router> 
@@ -63,7 +63,7 @@ updatetokendata=updateCurrentTrade;
       
       <Routes>
         <Route element={<TradeContent tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/"/>
-        <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} exact path="/manage"/>
+        <Route element={<Manage tokenData={currentTrade} currentUSDBal={currentUSDBal} currentTokenBal={currentTokenBal}/>} path="/manage"/>
         <Route  element={<CreateToken/>} path="/create"/>
       </Routes>
     </Router>

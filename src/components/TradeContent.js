@@ -3,12 +3,14 @@ import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
 import './css/nav.css';
-import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance,getPool} from "./source"
+import {sellToken,buyToken,approveTX,USDAddress,tokenAD,changeFrame, buildChart,frame,getMaxBalance,getPool, updatePool} from "./source"
 import TokenList from './searchOption';
 import { tradeselec,manageselect,createselect } from './Navbar';
 import { createselectp,manageselectp,tradeselecp } from './Navphone';
 export var scroll;
 export var tradeSearch;
+export var chtt;
+
 function TradeContent(props) {
   const [selected,changeSelected] = React.useState('Buy')
   const [currentBuyState,changeBuyState] = React.useState('buy-selected');
@@ -19,6 +21,7 @@ function TradeContent(props) {
   const [estimateRec,updateEst] = React.useState(0);
   let searchVal = React.createRef();
   let amount = React.createRef();
+
   tradeSearch =searchVal;
   scroll=updateScroll;
   React.useEffect(()=>{
@@ -28,6 +31,12 @@ function TradeContent(props) {
     tradeselecp("nav-options-selected-p")
     manageselectp("nav-options-p")
     createselectp("nav-options-p")
+    const f = async()=>{
+      if(tokenAD){
+        await getPool(tokenAD);
+      }
+    }
+    f();
   },[])
 
   const calculateToken = ()=>{
@@ -97,6 +106,7 @@ function TradeContent(props) {
               changeSelected('Buy');
               changeBuyState('buy-selected');
               changeSellState('sell');
+              updatePool()
             }}>
               Buy
             </div>
@@ -104,6 +114,7 @@ function TradeContent(props) {
               changeSelected('Sell');
               changeBuyState('buy');
               changeSellState('sell-selected');
+              updatePool(); 
             }}>
               Sell
             </div>
@@ -158,7 +169,7 @@ function TradeContent(props) {
             </div>
             {props.tokenData.usdinpool &&
             <div className='est'>
-              <div>Estimated Tokens Received:</div>
+              <div>Estimated Received:</div>
               <div>{estimateRec}</div>
             </div>}
             {props.tokenData.trading?<><button onClick={ async()=>{
