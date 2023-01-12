@@ -63,11 +63,11 @@ searched=searchVal;
         <button style={{ margin: '3%' }} onClick={()=>{
           createPool(thresh.current.value)
         }}>Create Pool</button>
-        {<button style={{ margin: '3%' }} onClick={()=>{
-          setPoolAddress();
-        }}>Set Pool Address</button>}
+        
         </>
-        }</>:
+        }<button style={{ margin: '3%' }} onClick={()=>{
+          setPoolAddress();
+        }}>Set Pool Address</button></>:
         <><span style={{ fontSize: '20px', padding: '2%' }}>
         Trading has been disabled for liquidity removal vote,
         <br />
