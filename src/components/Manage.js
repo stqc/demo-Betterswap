@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance} from './source';
+import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance, setPoolAddress} from './source';
 import TokenList from './searchOption';
 import Alert from './alert';
 import { createselect, manageselect, tradeselec } from './Navbar';
@@ -43,38 +43,15 @@ searched=searchVal;
       <div className="chart-content" style={{ padding: '2%' }}>
         {props.tokenData.trading?<>
         <span style={{ fontSize: '20px', padding: '2%' }}>
-          Following are the required methods necessary for pool creation
-          <br />
-          These methods can be updated after the creation of the pool
+          In order to create a pool for your token to be traded on BetterSwap, please enter the Threshold to obtain the DAO token and press Create Pool
+       
+      
           <br/> <h5>For creating a new pool please search for your token by pasting the token address in the search bar from the menu<br/>Once the pool is created you may add the liquidity as required</h5>
-          <h4 style={{color:"rgb(16,255,27)"}}>NOTE: The total tax cannot exceed more than 30%<br/>Total Buy Tax= Development Tax on Buys + AutoLP Tax Eg: (5+2=7% Total Buy Tax)
-          <br/>Total Sell Tax= Development Tax on Sells + AutoLP Tax Eg:(15+10=25% Total Sell Tax)</h4>
+            <h5>Once the pool is created, please click on the Set Pool Address button to enable seamless trading for the pool</h5>
+            <h5>NOTE: Once the above steps are completed for your token the mentioned buttons from above wil NOT appear</h5>
         </span>
-        <div className="amount" style={{ margin: '2%' }}>
-          <input
-            style={{ width: '100%', fontSize: 'large' }}
-            placeholder="Enter Development Tax On Buys (type 0 for none)"
-            type="number"
-            min="0" ref={btx}
-          />
-        </div>
-        <div className="amount" style={{ margin: '2%' }}>
-          <input
-            style={{ width: '100%', fontSize: 'large' }}
-            placeholder="Enter Development Tax On Sells (type 0 for none)"
-            type="number"
-            min="0" ref={stx}
-          />
-        </div>
-        <div className="amount" style={{ margin: '2%' }}>
-          <input ref={lp}
-            style={{ width: '100%', fontSize: 'large' }}
-            placeholder="Enter AutoLP Tax (type 0 for none)"
-            type="number"
-            min="0"
-          /> 
-        </div>
         {props.tokenData.Address!=="0x0000000000000000000000000000000000000000" || props.tokenData.Address!==null &&
+        <>
         <div className="amount" style={{ margin: '2%' }}>
           <input ref={thresh}
             style={{ width: '100%', fontSize: 'large' }}
@@ -82,10 +59,15 @@ searched=searchVal;
             type="number"
             min="1"
           /> 
-        </div>}
+        </div>
         <button style={{ margin: '3%' }} onClick={()=>{
-          props.tokenData.Address==="0x0000000000000000000000000000000000000000"?createPool(btx.current.value,stx.current.value,lp.current.value,thresh.current.value):updatePoolTax(btx.current.value,stx.current.value,lp.current.value);
-        }}>{props.tokenData.Address==="0x0000000000000000000000000000000000000000"?"Create Pool":"Update Pool"}</button></>:
+          createPool(thresh.current.value)
+        }}>Create Pool</button>
+        {<button style={{ margin: '3%' }} onClick={()=>{
+          setPoolAddress();
+        }}>Set Pool Address</button>}
+        </>
+        }</>:
         <><span style={{ fontSize: '20px', padding: '2%' }}>
         Trading has been disabled for liquidity removal vote,
         <br />
