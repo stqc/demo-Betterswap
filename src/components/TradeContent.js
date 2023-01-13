@@ -102,19 +102,19 @@ function TradeContent(props) {
             <TokenList changeScroll ={updateScroll} searc={searchVal}/>
           </div>
           <div className="buy-sell">
-            <div className={currentBuyState} onClick={()=>{
+            <div className={currentBuyState} onClick={async()=>{
               changeSelected('Buy');
               changeBuyState('buy-selected');
               changeSellState('sell');
-              updatePool()
+              await updatePool()
             }}>
               Buy
             </div>
-            <div className={currentSellState} onClick={()=>{
+            <div className={currentSellState} onClick={async()=>{
               changeSelected('Sell');
               changeBuyState('buy');
               changeSellState('sell-selected');
-              updatePool(); 
+              await updatePool(); 
             }}>
               Sell
             </div>

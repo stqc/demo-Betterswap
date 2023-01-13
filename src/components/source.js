@@ -157,7 +157,10 @@ export const getPool=async(tokenAddress)=>
                 poolInfo.yesvote=await pool.methods.yesVotes().call();
                 poolInfo.novote=await pool.methods.noVotes().call();
                 poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
-                
+                if(Number(poolInfo.usdinpool)>0 && Number(poolInfo.tokeninpool)>0){
+                    poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString();
+                    poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString();                
+                }
                 await updatetokendata(poolInfo);
                 await buildChart()
                  
@@ -182,7 +185,8 @@ export const getPool=async(tokenAddress)=>
                 thresh:null,
                     };
                 await updatetokendata(poolInfo);
-                 
+                contentChanger("Pool does not exist yet");
+                visibleMaker("grid");
                 visibleMakerL("none");
                 await upChart();
             }
@@ -250,12 +254,14 @@ export const getPool=async(tokenAddress)=>
                 poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
                 
 
+                console.log("yup the bug");
+            await updatetokendata(poolInfo);
+            
                 if(Number(poolInfo.usdinpool)>0 && Number(poolInfo.tokeninpool)>0){
-                    poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString();
-                poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString();                
+                await (poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString());
+                await (poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString());                
                 }
             await updatetokendata(poolInfo);
-             
             await updateBalances();
             visibleMakerL("none");
            
@@ -285,7 +291,7 @@ export const getPool=async(tokenAddress)=>
              
             await updateBalances();
             visibleMakerL("none");
-           
+
             await upChart();
     }
     await updatetokendata(poolInfo);
@@ -295,7 +301,9 @@ export const getPool=async(tokenAddress)=>
 }
 
 export const setPoolAddress =async ()=>{
-    tokenSearched.methods.setPoolAddress(pool._address).send({from:connectedAccount[0]});
+    await tokenSearched.methods.setPoolAddress(pool._address).send({from:connectedAccount[0]});
+    contentChanger("Pool address set");
+    visibleMaker("grid");
 }
 
 export const getMaxBalance= async (TKaddress)=>{
