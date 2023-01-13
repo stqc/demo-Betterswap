@@ -226,12 +226,12 @@ export const getPool=async(tokenAddress)=>
              
             await updateBalances();
             visibleMakerL("none");
-            if(tradeSearch){
+            if(tradeSearch.current){
                 tradeSearch.current.value=tokenAD;
                 await upChart();
             }
             visibleMakerL("none");
-            if(searched){
+            if(searched.current){
                 searched.current.value=tokenAD;
             }
             visibleMakerL("none");
@@ -256,7 +256,11 @@ export const getPool=async(tokenAddress)=>
 
                 console.log("yup the bug");
             await updatetokendata(poolInfo);
-            
+            await updateBalances();
+            visibleMakerL("none");
+           
+            visibleMakerL("none");
+            await upChart();
                 if(Number(poolInfo.usdinpool)>0 && Number(poolInfo.tokeninpool)>0){
                 await (poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString());
                 await (poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString());                
@@ -534,7 +538,7 @@ export const createPool=async (thresh)=>{
     if(!ref){
         ref=factory._address;
         console.log(ref);
-    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0x9116266d1fc2D7F0Ae9d9BBf0BEDd608C72cA4e9");
+    }    var tokenFactory_=new web3.eth.Contract(tokenFactoryABI,"0x4e518a83C37d3721ca20032A502421Bbc89a1FC8");
     console.log(BurnTax,LPTax,wallets,addition);
         if(!LPTax.current){
             LPTax="0";
@@ -567,13 +571,6 @@ export const createPool=async (thresh)=>{
             contentChanger("Token created successfully");
             visibleMaker("grid");        
 
-}
-
-export const updatePoolTax=async (buy,sell,lp)=>{
-    console.log(buy,sell,lp)
-   var tx= await pool.methods.updatePoolTax(buy,sell,lp).send({from:connectedAccount[0]});
-   contentChanger("Trade Taxes Updated");
-   visibleMaker("grid");    
 }
 
 
