@@ -241,8 +241,14 @@ export const getPool=async(tokenAddress)=>
             poolInfo.Address=poolAD;            
                 poolInfo.buytax= await pool.methods.totalBuyTax().call();
                 poolInfo.saletax= await pool.methods.totalSaleTax().call();
-                poolInfo.token2usd= 0;
-                poolInfo.usd2token= 0;  
+                
+                try{poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString()
+                    poolInfo.usd2token=(await pool.methods.USDPerToken().call()/1e18).toLocaleString() }
+                catch(e){
+                    poolInfo.token2usd= 0;
+                    poolInfo.usd2token= 0;
+                  }
+
                 poolInfo.name= await tokenSearched.methods.name().call();
                 poolInfo.supply= (await tokenSearched.methods.totalSupply().call()/1e18).toLocaleString();
                 poolInfo.ben= await pool.methods.beneficiery().call();
@@ -253,18 +259,12 @@ export const getPool=async(tokenAddress)=>
                 poolInfo.novote=await pool.methods.noVotes().call();
                 poolInfo.thresh= (await pool.methods.DAOThreshold().call()/1e18).toLocaleString();
                 
-
-                console.log("yup the bug");
             await updatetokendata(poolInfo);
             await updateBalances();
             visibleMakerL("none");
            
             visibleMakerL("none");
             await upChart();
-                if(Number(poolInfo.usdinpool)>0 && Number(poolInfo.tokeninpool)>0){
-                await (poolInfo.token2usd= (await pool.methods.tokenPerUSD().call()/1e18).toLocaleString());
-                await (poolInfo.usd2token= (await pool.methods.USDPerToken().call()/1e18).toLocaleString());                
-                }
             await updatetokendata(poolInfo);
             await updateBalances();
             visibleMakerL("none");

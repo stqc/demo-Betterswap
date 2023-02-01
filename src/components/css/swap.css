@@ -9,47 +9,56 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
+    border:1px solid #747D88;
+    border-radius: 20px;
 }
 
 .buy-sell>div{
     width: 100%;
     text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-style: normal;
-    font-weight: 400;
     color: #CBCFD4;
     font-size: 15px;
     cursor: pointer;
     padding: 2%;
+    border-radius: 15px;
+    margin:1.3% 1%;
+    font-weight: 900;
+    font-size: medium;
+    font-family: Montserrat;
+    font-style: normal;
+    
 }
 
 .sell,.sell-selected{
-    background: linear-gradient(90deg, rgb(201, 16, 16) 40%, hsla(0, 100%, 19%, 1) 100%);
+   background:transparent;
+   font-weight: 900;
 }
 .buy,.buy-selected{
-    background: linear-gradient(270deg, rgb(12, 156, 12) 40%, rgb(0, 97, 5) 100%);
+    background:transparent;
+    font-weight: 900;
+    
 }
 .buy-selected{
-    box-shadow: 0px 3px 4px rgb(16, 201, 16)
+    background: linear-gradient(90deg, #F27A54   0%, #A154F2 100%);
 }
 .sell-selected{
-    box-shadow: 2px 3px 4px rgb(201, 16, 16)
+    background: linear-gradient(90deg, #F27A54   0%, #A154F2 100%);
 }
 
 .info-table{
     display: grid;
     grid-template-columns: 1fr;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     color: #CBCFD4;
 }
 .info-table>div{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     color: #CBCFD4;
     padding: 1%;
     font-size: 15px;
@@ -58,9 +67,9 @@
 .est{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 100;
+    font-weight: 900;
     font-size: 12px;
     color: #CBCFD4;
 }
@@ -75,9 +84,9 @@
     border-radius: 20px;
 }
 .amount>p{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     font-size: 12px;
     margin: 5px 5px 0.5px 5px ;
 }
@@ -92,9 +101,9 @@
     border:0px solid transparent;
     background-repeat:no-repeat ;
     color: #FFFFFF;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     font-size: 15px;
     box-shadow: 0 0 1px rgba(255,255,255,0);
     cursor: pointer;
@@ -108,7 +117,7 @@
 }
 
 .chart-content{color: #FFFFFF;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Montserrat;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 900;
     font-size: 15px;}
