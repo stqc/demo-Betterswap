@@ -101,6 +101,7 @@ input:focus{
 input:focus::placeholder{
     color: transparent;
     text-align: left;
+    
 }
 .search>button{
     background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);
@@ -115,6 +116,7 @@ input:focus::placeholder{
     font-size: 15px;
     box-shadow: 0 0 1px rgba(255,255,255,0);
     cursor: pointer;
+    margin: 0.3% 0.3%;
 }
 .search>button:active{
     background: linear-gradient(90deg, #A154F2  0%,  #F27A54 100%);
@@ -215,6 +217,9 @@ font-family: Montserrat;
         padding-top: 0.5%;
         padding-bottom: 0.5%;
         border-radius: 20px;
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 900;
     }
     .search-p>button{
         background: linear-gradient(90deg, #F27A54 0%, #A154F2 100%);

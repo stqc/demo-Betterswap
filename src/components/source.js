@@ -623,6 +623,7 @@ window.ethereum.on("accountsChanged",async (acc)=>{
   
   window.addEventListener("load",async ()=>{
     await getFactoryContract();
+    await  connectToWeb3();
     console.log("TOken is",tokenAD)
     if(tokenAD){
         getPool(tokenAD);

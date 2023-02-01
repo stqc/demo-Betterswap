@@ -45,13 +45,7 @@ const [currentTokenBal,updateTokenBal] =React.useState('0')
 const [currentTrade,updateCurrentTrade]=React.useState(currentTradeDate);
 tkd=currentTrade;
 updatetokendata=updateCurrentTrade;
-useEffect(()=>{
-  async function startUP(){
-   await getFactoryContract();
-   await connectToWeb3();
-  }
-  startUP();
-},[currentTrade]);
+
   return (
     
     <Router> 
