@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './css/body.css';
 import './css/swap.css';
 import './css/chart.css';
-import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance, setPoolAddress} from './source';
+import { requestLiquidityRemoval,removeLP,addLiquidity,approveTX, USDAddress,tokenAD,createPool,updatePoolTax,voteNo,voteYes, getPool,updatePool,getMaxBalance, setPoolAddress, ref} from './source';
 import TokenList from './searchOption';
 import Alert from './alert';
 import { createselect, manageselect, tradeselec } from './Navbar';
@@ -32,9 +32,14 @@ searched=searchVal;
     manageselectp("nav-options-selected-p")
     createselectp("nav-options-p")
     var f = async()=>{
-        if(props.tokenData.Address!="0x0000000000000000000000000000000000000000")
-        await updatePool();
+      console.log(ref);
+        if(props.tokenData.Address!="0x0000000000000000000000000000000000000000"){
+        await updatePool();}
+        if(tokenAD){
+      await getPool(tokenAD);
     }
+    }
+    
     f();
   },[])
 

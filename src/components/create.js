@@ -1,5 +1,5 @@
 import React from "react";
-import {approveTX,createToken,USDAddress} from './source';
+import {approveTX,createToken,ref,USDAddress} from './source';
 import { tradeselec,manageselect,createselect } from './Navbar';
 import { createselectp,manageselectp,tradeselecp } from './Navphone';
 import TaxInput from "./taxInputs";
@@ -79,7 +79,7 @@ function CreateToken(){
         </div>
         
             {!isVis && <button style={{margin: "3%" }} onClick={async ()=>{
-                await approveTX(USDAddress,"20","0xeBd69d7843Ea2818570e0d58D71132f8B6E716A0");
+                await approveTX(USDAddress,"20","0x4523c1C67409F7B56D448F072F326898a3230963");
                 changeapprtxt("USD Fee Approved")
                 changeVis(true);
             }}>{apprtxt}</button>}
@@ -108,7 +108,7 @@ function CreateToken(){
                     </ul>
                 </div>    
                 <button style={{display:show}} onClick={()=>{
-                  window.location.href="/manage?token="+tkad
+                  window.location.href="/manage?token="+tkad+"&ref="+ref;
                 }}>Go to Manage Token</button>            
             </div>
         </div>
